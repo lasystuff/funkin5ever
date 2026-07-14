@@ -1,0 +1,25 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://bvq3u7vw8prpa"
+path="res://.godot/imported/combo.png-90ccb7267ffd22dc66db2304a02eb2ed.fontdata"
+
+[deps]
+
+source_file="res://core/fonts/combo.png"
+dest_files=["res://.godot/imported/combo.png-90ccb7267ffd22dc66db2304a02eb2ed.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "45", "45")
+kerning_pairs=PackedStringArray()
+columns=12
+rows=1
+image_margin=Rect2i(0, 0, -10, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+ascent=0
+descent=0
+fallbacks=[]
+compress=true
+scaling_mode=2

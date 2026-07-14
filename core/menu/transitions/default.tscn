@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://r85qds1artln"]
+
+[ext_resource type="Script" uid="uid://b7fpfeyby5lhn" path="res://core/classes/transition_scene.gd" id="1_cjsln"]
+[ext_resource type="Texture2D" uid="uid://v45t3he42vsk" path="res://core/menu/transitions/fade.png" id="2_v87dv"]
+
+[sub_resource type="Animation" id="Animation_ih7du"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("texture_rect:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -1544)]
+}
+
+[sub_resource type="Animation" id="Animation_v87dv"]
+resource_name = "transition_in"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("texture_rect:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -824), Vector2(0, 720)]
+}
+
+[sub_resource type="Animation" id="Animation_1y8xb"]
+resource_name = "transition_out"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("texture_rect:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.03333333, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 720), Vector2(0, -824)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j3grj"]
+_data = {
+&"RESET": SubResource("Animation_ih7du"),
+&"transition_in": SubResource("Animation_v87dv"),
+&"transition_out": SubResource("Animation_1y8xb")
+}
+
+[node name="default_transition" type="Control" unique_id=1019986492 node_paths=PackedStringArray("animation_player")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cjsln")
+animation_player = NodePath("animation_player")
+
+[node name="animation_player" type="AnimationPlayer" parent="." unique_id=1664595219]
+libraries/ = SubResource("AnimationLibrary_j3grj")
+
+[node name="texture_rect" type="TextureRect" parent="." unique_id=1138484841]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1544.0
+offset_bottom = -1440.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_v87dv")
+
+[node name="color_rect" type="ColorRect" parent="texture_rect" unique_id=1964450231]
+layout_mode = 0
+offset_top = 824.0
+offset_right = 1280.0
+offset_bottom = 1544.0
+color = Color(0, 0, 0, 1)

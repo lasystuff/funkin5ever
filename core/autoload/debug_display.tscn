@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://da3817d56yaqc"]
+
+[ext_resource type="FontFile" uid="uid://c5regg786kpn7" path="res://core/fonts/cascadia.ttf" id="1_bgsxs"]
+[ext_resource type="Script" uid="uid://dldn5g36su0a5" path="res://core/autoload/debug_display.gd" id="1_ymqys"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bgsxs"]
+font = ExtResource("1_bgsxs")
+outline_size = 6
+outline_color = Color(0, 0, 0, 1)
+
+[node name="debug_display" type="CanvasLayer" unique_id=1069649642]
+layer = 1000
+script = ExtResource("1_ymqys")
+
+[node name="label" type="Label" parent="." unique_id=1619250455]
+unique_name_in_owner = true
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 1264.0
+offset_bottom = 704.0
+text = "60FPS • 300MB / 200MB"
+label_settings = SubResource("LabelSettings_bgsxs")

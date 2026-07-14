@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://cm37i7wyxvt6j"]
+
+[ext_resource type="SpriteFrames" uid="uid://b271lbvy0665t" path="res://core/menu/checkbox.xml" id="1_tp1kh"]
+[ext_resource type="Script" uid="uid://fa34lnskiyvh" path="res://core/menu/checkbox.gd" id="1_ydd6n"]
+[ext_resource type="Script" uid="uid://s08545ch4u74" path="res://core/classes/extensions/animated_sprite_ex.gd" id="2_6j4nn"]
+
+[sub_resource type="Animation" id="Animation_ydd6n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Check Box selecting animation"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dxv82"]
+resource_name = "check"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Check Box selecting animation"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_6j4nn"]
+resource_name = "uncheck"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Check Box unselected"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 40)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wxl40"]
+_data = {
+&"RESET": SubResource("Animation_ydd6n"),
+&"check": SubResource("Animation_dxv82"),
+&"uncheck": SubResource("Animation_6j4nn")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sp7mk"]
+size = Vector2(130, 130)
+
+[node name="checkbox" type="Control" unique_id=1978211430 node_paths=PackedStringArray("animation_player", "hitbox_area")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -64.0
+offset_right = 64.0
+offset_bottom = 128.0
+script = ExtResource("1_ydd6n")
+animation_player = NodePath("sprite/animation_player")
+hitbox_area = NodePath("area")
+
+[node name="sprite" type="AnimatedSprite2D" parent="." unique_id=944627798]
+position = Vector2(65, 25.5)
+sprite_frames = ExtResource("1_tp1kh")
+animation = &"Check Box selecting animation"
+frame = 10
+frame_progress = 1.0
+script = ExtResource("2_6j4nn")
+metadata/_custom_type_script = "uid://s08545ch4u74"
+
+[node name="animation_player" type="AnimationPlayer" parent="sprite" unique_id=1125211548]
+libraries/ = SubResource("AnimationLibrary_wxl40")
+
+[node name="area" type="Area2D" parent="." unique_id=576893692]
+position = Vector2(65, 65.5)
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="area" unique_id=601033325]
+position = Vector2(-1, -1)
+shape = SubResource("RectangleShape2D_sp7mk")

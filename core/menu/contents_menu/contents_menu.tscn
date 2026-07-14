@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://bnvn3drgkj2j2"]
+
+[ext_resource type="Script" uid="uid://5eljo7ay8u5f" path="res://core/menu/contents_menu/contents_menu.gd" id="1_d0ic4"]
+[ext_resource type="Texture2D" uid="uid://dxdyjhe1411j6" path="res://core/menu/bg_gray.png" id="1_i4f7i"]
+[ext_resource type="Theme" uid="uid://vielbcv4142l" path="res://core/menu/contents_menu/capsule_theme.tres" id="3_i6olf"]
+[ext_resource type="Texture2D" uid="uid://dwrgasbiosjuq" path="res://core/menu/contents_menu/icon.png" id="4_lagj5"]
+
+[node name="contents_menu" type="Node2D" unique_id=1531764628]
+script = ExtResource("1_d0ic4")
+
+[node name="parallax_2d" type="Parallax2D" parent="." unique_id=1021664748]
+scroll_scale = Vector2(0, 0)
+
+[node name="bg_gray" type="TextureRect" parent="parallax_2d" unique_id=115031802]
+modulate = Color(0.78431374, 0.58431375, 0.84705883, 1)
+offset_right = 1286.0
+offset_bottom = 730.0
+texture = ExtResource("1_i4f7i")
+stretch_mode = 4
+
+[node name="contents" type="VBoxContainer" parent="." unique_id=2085231935]
+unique_name_in_owner = true
+offset_left = 64.0
+offset_right = 762.0
+offset_bottom = 728.0
+focus_behavior_recursive = 1
+theme_override_constants/separation = 16
+
+[node name="ui" type="CanvasLayer" parent="." unique_id=798763688]
+
+[node name="info_bg" type="Button" parent="ui" unique_id=1387959753]
+offset_left = 792.0
+offset_top = 24.0
+offset_right = 1208.0
+offset_bottom = 552.0
+mouse_behavior_recursive = 1
+theme = ExtResource("3_i6olf")
+
+[node name="icon" type="TextureRect" parent="ui/info_bg" unique_id=317306251]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 32.0
+offset_top = 8.0
+offset_right = 83.84
+offset_bottom = 56.0
+texture = ExtResource("4_lagj5")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="title_label" type="RichTextLabel" parent="ui/info_bg" unique_id=1593559918]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 88.0
+offset_top = 16.0
+offset_right = 416.0
+offset_bottom = 64.0
+mouse_behavior_recursive = 2
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "17_Yen: Floor 2"
+scroll_active = false
+
+[node name="description_label" type="RichTextLabel" parent="ui/info_bg" unique_id=1153585374]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 32.0
+offset_top = 72.0
+offset_right = 400.0
+offset_bottom = 496.0
+mouse_behavior_recursive = 2
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "Welcome to the fan mod for 17 Bucks created by Japanese people!
+Thanks to team's efforts, we were able to implement 22 songs (16 of which were added)!
+We spent about a year creating this mod!
+
+あなたに神のご加護がありますように..."
+
+[node name="sort_up_button" type="Button" parent="ui" unique_id=1922078460]
+unique_name_in_owner = true
+offset_left = 768.0
+offset_top = 592.0
+offset_right = 968.0
+offset_bottom = 680.0
+focus_mode = 0
+mouse_behavior_recursive = 2
+theme = ExtResource("3_i6olf")
+
+[node name="label" type="Label" parent="ui/sort_up_button" unique_id=996728420]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 56.0
+offset_right = 132.0
+offset_bottom = 87.0
+scale = Vector2(-1, -1)
+text = "V"
+
+[node name="sort_down_button" type="Button" parent="ui" unique_id=222559252]
+unique_name_in_owner = true
+offset_left = 984.0
+offset_top = 592.0
+offset_right = 1184.0
+offset_bottom = 680.0
+focus_mode = 0
+mouse_behavior_recursive = 2
+theme = ExtResource("3_i6olf")
+
+[node name="label" type="Label" parent="ui/sort_down_button" unique_id=419198411]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 28.0
+offset_right = 116.0
+offset_bottom = 59.0
+text = "V"
+
+[node name="camera" type="Camera2D" parent="." unique_id=824769365]
+unique_name_in_owner = true
+position = Vector2(640, 360)
+position_smoothing_enabled = true
+
+[connection signal="pressed" from="ui/sort_up_button" to="." method="_on_sort_up_button_pressed"]
+[connection signal="pressed" from="ui/sort_down_button" to="." method="_on_sort_down_button_pressed"]

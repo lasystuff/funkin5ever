@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://co8mkh82gl188"]
+
+[ext_resource type="Theme" uid="uid://vielbcv4142l" path="res://core/menu/contents_menu/capsule_theme.tres" id="1_x6ahb"]
+[ext_resource type="Script" uid="uid://dyigdsg1qrhqo" path="res://core/menu/contents_menu/content_capsule.gd" id="2_6aonj"]
+[ext_resource type="PackedScene" uid="uid://cm37i7wyxvt6j" path="res://core/menu/checkbox.tscn" id="2_dnxx4"]
+
+[node name="button" type="Button" unique_id=1338678326]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -360.0
+offset_right = 416.0
+offset_bottom = -264.0
+grow_vertical = 2
+theme = ExtResource("1_x6ahb")
+toggle_mode = true
+action_mode = 0
+text = "Friday Night Funkin'"
+alignment = 0
+script = ExtResource("2_6aonj")
+
+[node name="checkbox" parent="." unique_id=1978211430 instance=ExtResource("2_dnxx4")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 8.000002
+offset_top = -24.000004
+offset_right = 8.000002
+offset_bottom = 104.0
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+enabled = false
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]

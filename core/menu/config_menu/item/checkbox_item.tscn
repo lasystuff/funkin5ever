@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d0bl7s6sg5f4s"]
+
+[ext_resource type="Script" uid="uid://dtmp0lgj7evim" path="res://core/menu/config_menu/item/checkbox_item.gd" id="1_rck6g"]
+[ext_resource type="PackedScene" uid="uid://cm37i7wyxvt6j" path="res://core/menu/checkbox.tscn" id="2_6eqt5"]
+[ext_resource type="FontFile" uid="uid://c7euvp5baixmv" path="res://core/fonts/alphabet.png" id="2_7kb67"]
+
+[node name="config_item" type="HBoxContainer" unique_id=410455542 node_paths=PackedStringArray("label")]
+offset_right = 830.0
+offset_bottom = 80.0
+theme_override_constants/separation = 24
+script = ExtResource("1_rck6g")
+label = NodePath("label")
+
+[node name="label" type="Label" parent="." unique_id=1979817662]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_7kb67")
+theme_override_font_sizes/font_size = 80
+text = "DOWNSCROLL"
+
+[node name="checkbox" parent="." unique_id=1978211430 instance=ExtResource("2_6eqt5")]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -30)

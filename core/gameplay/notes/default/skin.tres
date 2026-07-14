@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="NoteSkin" format=3 uid="uid://dt5s0n7vmwgk8"]
+
+[ext_resource type="SpriteFrames" uid="uid://beg3xm31u73hf" path="res://core/gameplay/notes/default/notes.xml" id="1_rdsc5"]
+[ext_resource type="Script" uid="uid://cwokxauih2nra" path="res://core/classes/resources/note_skin.gd" id="2_wu6jj"]
+[ext_resource type="SpriteFrames" uid="uid://dg1hwb6ebku52" path="res://core/gameplay/notes/default/splashes.xml" id="3_wad10"]
+[ext_resource type="Texture2D" uid="uid://cs8qg14cgmkmn" path="res://core/gameplay/notes/default/sustains/left.png" id="3_wu6jj"]
+[ext_resource type="Texture2D" uid="uid://7pt131h0eehg" path="res://core/gameplay/notes/default/sustains/down.png" id="3_wu822"]
+[ext_resource type="Texture2D" uid="uid://j0dtjixob4qc" path="res://core/gameplay/notes/default/sustains/down_end.png" id="4_wad10"]
+[ext_resource type="Texture2D" uid="uid://ba8igespf3fr5" path="res://core/gameplay/notes/default/sustains/left_end.png" id="6_1cu7o"]
+[ext_resource type="Texture2D" uid="uid://ekqqwp4m0ywm" path="res://core/gameplay/notes/default/sustains/right.png" id="7_rvhg3"]
+[ext_resource type="Texture2D" uid="uid://dbqn2fijddvsb" path="res://core/gameplay/notes/default/sustains/right_end.png" id="8_3ntxs"]
+[ext_resource type="Texture2D" uid="uid://cmhpq8kc1nli5" path="res://core/gameplay/notes/default/sustains/up.png" id="9_ldqe6"]
+[ext_resource type="Texture2D" uid="uid://ht75dwddf7ih" path="res://core/gameplay/notes/default/sustains/up_end.png" id="10_uubcp"]
+
+[resource]
+script = ExtResource("2_wu6jj")
+metadata/_custom_type_script = "uid://cwokxauih2nra"

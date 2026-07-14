@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://wl54eujibcfj"]
+
+[ext_resource type="Script" uid="uid://b3ncgn1my7xt3" path="res://core/gameplay/gameplay.gd" id="1_imtvj"]
+
+[node name="gameplay" type="Node2D" unique_id=2133785341]
+script = ExtResource("1_imtvj")
+
+[node name="audio" type="Node" parent="." unique_id=101968915]
+unique_name_in_owner = true
+
+[node name="hud_layer" type="CanvasLayer" parent="." unique_id=1171944992]
+
+[node name="flash" type="ColorRect" parent="hud_layer" unique_id=230483703]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="countdown" type="TextureRect" parent="hud_layer" unique_id=611580653]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -378.5
+offset_top = -182.0
+offset_right = 378.5
+offset_bottom = 182.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(378.5, 174)
+stretch_mode = 3
+
+[node name="countdown_audio" type="AudioStreamPlayer" parent="hud_layer/countdown" unique_id=1587334296]
+unique_name_in_owner = true
+
+[node name="camera" type="Camera2D" parent="." unique_id=1220773919]
+unique_name_in_owner = true
+position = Vector2(640, 360)

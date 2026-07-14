@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://sjp43yu4pfqs"]
+
+[ext_resource type="SpriteFrames" uid="uid://beg3xm31u73hf" path="res://core/gameplay/notes/default/notes.xml" id="1_tmdlf"]
+[ext_resource type="Script" uid="uid://x022d4ativ3v" path="res://core/gameplay/notes/note.gd" id="2_3825g"]
+[ext_resource type="Texture2D" uid="uid://ba8igespf3fr5" path="res://core/gameplay/notes/default/sustains/left_end.png" id="3_saof7"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8lhrk"]
+load_path = "res://.godot/imported/left.png-574b5cf689317e168cfc1013c094d803.ctex"
+
+[node name="note" type="AnimatedSprite2D" unique_id=662164111]
+sprite_frames = ExtResource("1_tmdlf")
+animation = &"purple"
+script = ExtResource("2_3825g")
+
+[node name="clip_rect" type="ColorRect" parent="." unique_id=328483951]
+unique_name_in_owner = true
+show_behind_parent = true
+offset_left = -128.0
+offset_right = 128.0
+offset_bottom = 1216.0
+pivot_offset = Vector2(128, 0)
+color = Color(1, 1, 1, 0)
+
+[node name="sustain" type="TextureRect" parent="clip_rect" unique_id=1767482668]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -26.0
+offset_right = 26.0
+offset_bottom = 87.0
+grow_horizontal = 2
+pivot_offset = Vector2(26, 0)
+texture = SubResource("CompressedTexture2D_8lhrk")
+
+[node name="tail" type="Sprite2D" parent="clip_rect" unique_id=1529358873]
+unique_name_in_owner = true
+position = Vector2(128, 80)
+texture = ExtResource("3_saof7")
+offset = Vector2(0, 43.5)

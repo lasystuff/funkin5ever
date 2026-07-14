@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dy7jbeha3jknu"]
+
+[ext_resource type="Script" uid="uid://cjaumgy622xh8" path="res://core/autoload/transition.gd" id="1_4p0el"]
+
+[node name="transition" type="CanvasLayer" unique_id=192980594]
+layer = 100
+script = ExtResource("1_4p0el")

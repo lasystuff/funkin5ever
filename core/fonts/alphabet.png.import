@@ -1,0 +1,25 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://c7euvp5baixmv"
+path="res://.godot/imported/alphabet.png-c153b4fc609fab275c67df63946b717d.fontdata"
+
+[deps]
+
+source_file="res://core/fonts/alphabet.png"
+dest_files=["res://.godot/imported/alphabet.png-c153b4fc609fab275c67df63946b717d.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "44", "32", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "45", "46", "58", "64", "95")
+kerning_pairs=PackedStringArray()
+columns=43
+rows=1
+image_margin=Rect2i(-17, -4, 0, 0)
+character_margin=Rect2i(34, 12, 0, 0)
+ascent=0
+descent=0
+fallbacks=[]
+compress=true
+scaling_mode=2

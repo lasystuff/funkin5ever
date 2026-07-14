@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bo71bsekno06o"]
+
+[ext_resource type="Script" uid="uid://c3t2aex4bda23" path="res://core/autoload/global_sound.gd" id="1_7bh3n"]
+
+[node name="global_sound" type="Node" unique_id=1867257144]
+process_mode = 3
+script = ExtResource("1_7bh3n")
+
+[node name="sfx_player" type="AudioStreamPlayer" parent="." unique_id=512859552]
+unique_name_in_owner = true
+
+[node name="music_player" type="AudioStreamPlayer" parent="." unique_id=1170882147]
+unique_name_in_owner = true

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CountdownSkin" format=3 uid="uid://box5jjdt43poh"]
+
+[ext_resource type="Texture2D" uid="uid://dxbh3wyw2ll3h" path="res://core/gameplay/countdown/default/ready.png" id="1_g7rkw"]
+[ext_resource type="Script" uid="uid://djscuwved8cqv" path="res://core/classes/resources/countdown_skin.gd" id="2_ahotx"]
+
+[resource]
+script = ExtResource("2_ahotx")
+metadata/_custom_type_script = "uid://djscuwved8cqv"

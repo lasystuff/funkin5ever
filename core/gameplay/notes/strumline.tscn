@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dnyyrjtlk1vfo"]
+
+[ext_resource type="SpriteFrames" uid="uid://beg3xm31u73hf" path="res://core/gameplay/notes/default/notes.xml" id="1_fa6ul"]
+[ext_resource type="Script" uid="uid://bmd8n3ldlk4h2" path="res://core/gameplay/notes/strumline.gd" id="1_rm621"]
+
+[node name="strumline" type="Control" unique_id=318479143]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_rm621")
+
+[node name="left" type="AnimatedSprite2D" parent="." unique_id=1064957387]
+unique_name_in_owner = true
+position = Vector2(56.000004, 56.000004)
+scale = Vector2(0.7, 0.7)
+sprite_frames = ExtResource("1_fa6ul")
+animation = &"arrowLEFT"
+frame_progress = 1.0
+
+[node name="down" type="AnimatedSprite2D" parent="." unique_id=509415476]
+unique_name_in_owner = true
+position = Vector2(168, 56)
+scale = Vector2(0.7, 0.7)
+sprite_frames = ExtResource("1_fa6ul")
+animation = &"arrowDOWN"
+frame_progress = 1.0
+
+[node name="up" type="AnimatedSprite2D" parent="." unique_id=906934153]
+unique_name_in_owner = true
+position = Vector2(280, 56)
+scale = Vector2(0.7, 0.7)
+sprite_frames = ExtResource("1_fa6ul")
+animation = &"arrowUP"
+frame_progress = 1.0
+
+[node name="right" type="AnimatedSprite2D" parent="." unique_id=1896345369]
+unique_name_in_owner = true
+position = Vector2(392, 56)
+scale = Vector2(0.7, 0.7)
+sprite_frames = ExtResource("1_fa6ul")
+animation = &"arrowRIGHT"
+frame_progress = 1.0
+
+[node name="notes" type="Node2D" parent="." unique_id=1938588696]
+unique_name_in_owner = true
+scale = Vector2(0.7, 0.7)
+
+[node name="splashes" type="Node2D" parent="." unique_id=1988131926]
+unique_name_in_owner = true

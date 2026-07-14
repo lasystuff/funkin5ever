@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dvqyjo8dfalx6"]
+
+[ext_resource type="SpriteFrames" uid="uid://dg1hwb6ebku52" path="res://core/gameplay/notes/default/splashes.xml" id="1_k25lx"]
+[ext_resource type="Script" uid="uid://51pvfase0ao0" path="res://core/gameplay/notes/note_splash.gd" id="1_llemu"]
+
+[node name="note_splash" type="AnimatedSprite2D" unique_id=1544465564]
+sprite_frames = ExtResource("1_k25lx")
+animation = &"note splash blue 1"
+script = ExtResource("1_llemu")

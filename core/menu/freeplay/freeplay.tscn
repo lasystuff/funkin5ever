@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cb7nj4aj6n0sc"]
+
+[ext_resource type="Script" uid="uid://cgndootlpaexq" path="res://core/menu/freeplay/freeplay.gd" id="1_6ifrp"]
+[ext_resource type="Texture2D" uid="uid://dxdyjhe1411j6" path="res://core/menu/bg_gray.png" id="2_mocba"]
+
+[node name="freeplay" type="Node2D" unique_id=1546647075]
+script = ExtResource("1_6ifrp")
+
+[node name="parallax_2d" type="Parallax2D" parent="." unique_id=1962553956]
+scroll_scale = Vector2(0, 0)
+
+[node name="bg" type="TextureRect" parent="parallax_2d" unique_id=691765185]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 1286.0
+offset_bottom = 730.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_mocba")
+
+[node name="songs" type="VBoxContainer" parent="." unique_id=1719211840]
+unique_name_in_owner = true
+offset_left = 64.0
+offset_right = 762.0
+offset_bottom = 728.0
+theme_override_constants/separation = 16
+
+[node name="camera" type="Camera2D" parent="." unique_id=1496341097]
+unique_name_in_owner = true
+position = Vector2(640, 360)
+position_smoothing_enabled = true

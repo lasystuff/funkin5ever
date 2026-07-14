@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dmomf6vhues5x"]
+
+[ext_resource type="Script" uid="uid://cg5rm7brruyqj" path="res://core/gameplay/hud/objects/judgement_display.gd" id="1_07cwx"]
+[ext_resource type="Texture2D" uid="uid://dtyt7rag2sioq" path="res://core/gameplay/hud/judgements/sick.png" id="2_44tbg"]
+[ext_resource type="FontFile" uid="uid://bvq3u7vw8prpa" path="res://core/fonts/combo.png" id="3_fwi2x"]
+
+[node name="judgement_display" type="Control" unique_id=1380617561 node_paths=PackedStringArray("judgement", "combo")]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+script = ExtResource("1_07cwx")
+judgement = NodePath("judgement")
+combo = NodePath("combo")
+
+[node name="judgement" type="Sprite2D" parent="." unique_id=644968948]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_44tbg")
+
+[node name="combo" type="Label" parent="." unique_id=830315842]
+layout_mode = 0
+offset_left = -384.0
+offset_top = 32.0
+offset_right = 384.0
+offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("3_fwi2x")
+theme_override_font_sizes/font_size = 38
+text = "1234"
+horizontal_alignment = 1
+vertical_alignment = 1
