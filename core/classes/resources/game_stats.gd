@@ -57,7 +57,6 @@ func score_note(note:Note) -> String:
 	var judge = judge_wife3(diff)
 	if judge > 1.98: # i dont care anymore
 		judge = 2
-	print(judge)
 	total_hits += judge
 	
 	combo += 1

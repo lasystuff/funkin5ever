@@ -92,6 +92,14 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 						event_data.data.duration = 0
 				"Add Camera Zoom":
 					event_data.type = "camera_bop"
+				"Scroll Speed Change":
+					event_data.type = "change_scroll_speed"
+					event_data.data = {
+						"value": _get_arg(base_event.params, 1, 1) / chart.scroll_speed,
+						"duration": _get_arg(base_event.params, 2, 4) if _get_arg(base_event.params, 0, true) == true else 0,
+						"trans": parse_trans(_get_arg(base_event.params, 3, "linear")),
+						"ease": parse_ease(_get_arg(base_event.params, 4, "In"))
+					}
 				_:
 					event_data.type = base_event.name
 					event_data.data = {

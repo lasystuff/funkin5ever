@@ -40,8 +40,6 @@ var countdown_skin:CountdownSkin = load("res://core/gameplay/countdown/default/s
 var camera_bop_interval:int = 4
 var camera_bop_mult:float = 1
 var camera_bop_add:float = 0
-var camera_position:Node2D = Node2D.new()
-var camera_position_offset:Node2D = Node2D.new()
 var camera_zoom_mult:float = 1
 var camera_offset_scale:float = 10
 
@@ -117,10 +115,6 @@ func _ready() -> void:
 	stage = load(stage_path.path_join("stage.tscn")).instantiate()
 	add_child(stage)
 	
-	if is_instance_valid(stage.camera_override):
-		%camera.enabled = false
-		stage.camera_override.parent_camera = %camera
-	
 	player = Character.get_instance(chart.player)
 	stage.add_character(player, Stage.CharacterType.PLAYER)
 	if !player.facing_left: player.flip_character()
@@ -133,7 +127,9 @@ func _ready() -> void:
 	stage.add_character(spectator, Stage.CharacterType.SPECTATOR)
 	if spectator.facing_left: spectator.flip_character()
 	
-	camera_position.position = lerp(player.get_camera_pos(), opponent.get_camera_pos(), 0.5)
+	%camera.position = lerp(player.get_camera_pos(), opponent.get_camera_pos(), 0.5)
+	%camera.zoom.x = stage.zoom
+	%camera.zoom.y = stage.zoom
 	
 	hud = hud_scene.instantiate()
 	$hud_layer.add_child(hud)
@@ -233,12 +229,6 @@ func _process(delta: float) -> void:
 	camera_bop_add = lerpf(0, camera_bop_add, exp(-delta * 3.125))
 	hud.scale = Vector2(1 + camera_bop_add, 1 + camera_bop_add)
 	
-	%camera.position = camera_position.position
-	%camera.offset = camera_position_offset.position
-	
-	%camera.zoom.x = (stage.zoom * camera_zoom_mult) + camera_bop_add
-	%camera.zoom.y = %camera.zoom.x
-	
 	if Input.is_action_just_pressed("ui_pause"):
 		var pause = pause_scene.instantiate()
 		add_child(pause)
@@ -282,7 +272,7 @@ func move_camera(_pos:Vector2, _speed:float, _trans:Variant = null, _ease:Varian
 	if camera_tween != null:
 		camera_tween.kill()
 	if _speed <= 0:
-		camera_position.position = _pos
+		_get_current_camera().global_position = _pos
 		return
 	
 	if _trans == null: _trans = Tween.TransitionType.TRANS_EXPO
@@ -290,7 +280,7 @@ func move_camera(_pos:Vector2, _speed:float, _trans:Variant = null, _ease:Varian
 	
 	camera_tween = get_tree().create_tween()
 	camera_tween.set_trans(_trans).set_ease(_ease)
-	camera_tween.tween_property(camera_position, "position", _pos, _speed)
+	camera_tween.tween_property(_get_current_camera(), "global_position", _pos, _speed)
 
 var flash_tween:Tween
 func flash_camera(_speed:float, color:Color = Color.WHITE):
@@ -320,14 +310,15 @@ func move_camera_offset(direction:int):
 	
 	camera_offset_tween = get_tree().create_tween()
 	camera_offset_tween.set_trans(Tween.TransitionType.TRANS_EXPO).set_ease(Tween.EaseType.EASE_OUT)
-	camera_offset_tween.tween_property(camera_position_offset, "position", pos, 1.4)
+	camera_offset_tween.tween_property(_get_current_camera(), "offset", pos, 1.4)
 
 var zoom_tween:Tween
 func zoom_camera(_value:float, _speed:float, _trans:Variant = null, _ease:Variant = null):
 	if zoom_tween != null:
 		zoom_tween.kill()
 	if _speed <= 0:
-		camera_zoom_mult = _value
+		_get_current_camera().zoom.x = stage.zoom * _value
+		_get_current_camera().zoom.y = stage.zoom * _value
 		return
 	
 	if _trans == null: _trans = Tween.TransitionType.TRANS_EXPO
@@ -335,7 +326,7 @@ func zoom_camera(_value:float, _speed:float, _trans:Variant = null, _ease:Varian
 	
 	zoom_tween = get_tree().create_tween()
 	zoom_tween.set_trans(_trans).set_ease(_ease)
-	zoom_tween.tween_property(self, "camera_zoom_mult", _value, _speed)
+	zoom_tween.tween_property(_get_current_camera(), "zoom", Vector2(stage.zoom * _value, stage.zoom * _value), _speed)
 	
 func _on_exit() -> void:
 	for script in scripts:
@@ -362,3 +353,9 @@ func _song_finished() -> void:
 				story_stats = null
 				Transition.switch_scene(return_scene)
 	Transition.switch_scene(return_scene)
+
+func _get_current_camera() -> Camera2D:
+	if is_instance_valid(stage.camera_override):
+		if stage.camera_override.override_movement:
+			return stage.camera_override
+	return %camera

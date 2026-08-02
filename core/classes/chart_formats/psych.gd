@@ -6,7 +6,6 @@ func check_format(song:String, difficulty:String = "normal") -> bool:
 	if base.has("format") && base.format.begins_with("psych_v1"):
 		return true
 	elif base.has("song") && base.song is not String: #legacy
-		print("YOOO")
 		return true
 	return false
 
@@ -29,7 +28,6 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 	chart.opponent = base.player2
 	chart.spectator = base.get("gfVersion", "gf")
 	chart.stage = base.stage
-	print(chart.stage)
 	
 	for section in base.notes:
 		for base_data in section.sectionNotes:

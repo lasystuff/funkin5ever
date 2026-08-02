@@ -123,7 +123,6 @@ offset_top = 48.0
 offset_right = -544.0
 offset_bottom = 48.0
 grow_horizontal = 0
-botplay = false
 play_note_splashes = true
 
 [node name="opponent_strumline" parent="." unique_id=2050830637 instance=ExtResource("4_2kr0o")]

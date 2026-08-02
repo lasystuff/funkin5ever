@@ -24,6 +24,18 @@ func _init() -> void:
 	if !is_instance_valid(player_start_point): player_start_point = StageCharacterPosition.new()
 	if !is_instance_valid(opponent_start_point): opponent_start_point = StageCharacterPosition.new()
 	if !is_instance_valid(spectator_start_point): spectator_start_point = StageCharacterPosition.new()
+	
+func call_event(type:String, data:Dictionary = {}) -> void:
+	if game != null:
+		var event = EventData.new()
+		event.type = type
+		event.data = data
+		event.time = Conductor.instance.song_position
+		
+		for script in game.scripts:
+			script._on_event_call(event)
+		self._on_event_call(event)
+		game.hud._on_event_call(event)
 
 func add_character(character:Character, type:CharacterType) -> void:
 	add_child(character)
@@ -36,11 +48,10 @@ func add_character(character:Character, type:CharacterType) -> void:
 
 	move_child(character, point.get_index())
 	character.global_position = point.global_position
-	character.material = point.material
 
 var game:Gameplay:
 	get():
-		return Gameplay.instance
+		return Gameplay.instance if is_instance_valid(Gameplay.instance) else null
 	
 func _ready() -> void: pass
 func _ready_post() -> void: pass
