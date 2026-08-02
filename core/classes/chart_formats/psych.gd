@@ -5,7 +5,8 @@ func check_format(song:String, difficulty:String = "normal") -> bool:
 	var base = get_raw_chart(song, difficulty)
 	if base.has("format") && base.format.begins_with("psych_v1"):
 		return true
-	elif base.has("song") && base.song is not String && !base.song.has("gfVersion"): #legacy
+	elif base.has("song") && base.song is not String: #legacy
+		print("YOOO")
 		return true
 	return false
 
@@ -36,7 +37,9 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 			data.time = base_data[0] / 1000
 			data.column = int(base_data[1]) % 4
 			data.length = base_data[2] / 1000
-			data.type = base_data[3] if base_data.size() > 3 else ""
+			if base_data.size() > 3:
+				if base_data[3] is String:
+					data.type = base_data[3]
 			
 			if legacy:
 				if (section.mustHitSection && base_data[1] < 4) or (!section.mustHitSection && base_data[1] > 3):

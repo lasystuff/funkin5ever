@@ -5,6 +5,10 @@
 [node name="gameplay" type="Node2D" unique_id=2133785341]
 script = ExtResource("1_imtvj")
 
+[node name="camera" type="Camera2D" parent="." unique_id=1220773919]
+unique_name_in_owner = true
+position = Vector2(640, 360)
+
 [node name="audio" type="Node" parent="." unique_id=101968915]
 unique_name_in_owner = true
 
@@ -38,7 +42,3 @@ stretch_mode = 3
 
 [node name="countdown_audio" type="AudioStreamPlayer" parent="hud_layer/countdown" unique_id=1587334296]
 unique_name_in_owner = true
-
-[node name="camera" type="Camera2D" parent="." unique_id=1220773919]
-unique_name_in_owner = true
-position = Vector2(640, 360)

@@ -13,9 +13,13 @@ enum CharacterType
 @export var opponent_start_point:StageCharacterPosition
 @export var spectator_start_point:StageCharacterPosition
 
+@export_category("Camera")
+@export var camera_override:StageCamera
+
 func _init() -> void:
-	Conductor.instance.step_hit.connect(_on_step_hit)
-	Conductor.instance.beat_hit.connect(_on_beat_hit)
+	if Conductor.instance != null:
+		Conductor.instance.step_hit.connect(_on_step_hit)
+		Conductor.instance.beat_hit.connect(_on_beat_hit)
 	
 	if !is_instance_valid(player_start_point): player_start_point = StageCharacterPosition.new()
 	if !is_instance_valid(opponent_start_point): opponent_start_point = StageCharacterPosition.new()
@@ -32,6 +36,7 @@ func add_character(character:Character, type:CharacterType) -> void:
 
 	move_child(character, point.get_index())
 	character.global_position = point.global_position
+	character.material = point.material
 
 var game:Gameplay:
 	get():

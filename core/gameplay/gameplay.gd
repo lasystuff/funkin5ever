@@ -45,9 +45,13 @@ var camera_position_offset:Node2D = Node2D.new()
 var camera_zoom_mult:float = 1
 var camera_offset_scale:float = 10
 
+var song_started:bool = true
+
 var scripts:Array[GameScript] = []
 var event_scripts:Dictionary[String, EventScript] = {}
 var note_type_scripts:Dictionary[String, GameScript] = {}
+
+@onready var audio:Node = %audio
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -112,6 +116,10 @@ func _ready() -> void:
 	if !DirAccess.dir_exists_absolute(stage_path): stage_path = ContentManager.get_content_path("gameplay/stages/stage")
 	stage = load(stage_path.path_join("stage.tscn")).instantiate()
 	add_child(stage)
+	
+	if is_instance_valid(stage.camera_override):
+		%camera.enabled = false
+		stage.camera_override.parent_camera = %camera
 	
 	player = Character.get_instance(chart.player)
 	stage.add_character(player, Stage.CharacterType.PLAYER)
@@ -189,6 +197,7 @@ func start_countdown() -> void:
 				%countdown.visible = false
 				countdown_timer.stop()
 				countdown_timer.queue_free()
+				song_started = true
 				for audio in %audio.get_children(): audio.play()
 				for script in scripts:
 					script._on_song_start()
@@ -223,7 +232,10 @@ func _process(delta: float) -> void:
 	
 	camera_bop_add = lerpf(0, camera_bop_add, exp(-delta * 3.125))
 	hud.scale = Vector2(1 + camera_bop_add, 1 + camera_bop_add)
-	%camera.position = camera_position.position + camera_position_offset.position
+	
+	%camera.position = camera_position.position
+	%camera.offset = camera_position_offset.position
+	
 	%camera.zoom.x = (stage.zoom * camera_zoom_mult) + camera_bop_add
 	%camera.zoom.y = %camera.zoom.x
 	

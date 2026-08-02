@@ -1,5 +1,6 @@
 extends Node
 const CORE_DIRECTORY:String = "res://core/"
+var PACKED_CONTENTS_DIRECTORY:String = OS.get_executable_path().get_base_dir().path_join("contents/")
 const CONTENTS_DIRECTORY:String = "res://contents/"
 
 var contents:Array[ContentMetadata] = []
@@ -11,6 +12,30 @@ var current_content:String = "_core"
 var reference_content = ContentMetadata.new()
 
 func _init() -> void:
+	# load mod zip/pck files
+	if OS.has_feature("template"):
+		# show warning
+		if not DirAccess.dir_exists_absolute(PACKED_CONTENTS_DIRECTORY):
+			DirAccess.make_dir_recursive_absolute(PACKED_CONTENTS_DIRECTORY)
+		else:
+			if DirAccess.get_directories_at(PACKED_CONTENTS_DIRECTORY).size() > 0:
+				var popup:AcceptDialog = AcceptDialog.new()
+				popup.dialog_text = "If you wish to run mods with this engine, they will not launch if they are in folder format.\nPlease place them in the `contents/` directory as .zip or .pck files."
+				popup.force_native = true
+				popup.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN
+				popup.process_mode = Node.PROCESS_MODE_ALWAYS
+
+				popup.confirmed.connect(func():
+					popup.queue_free()
+				)
+				
+				add_child(popup)
+				popup.visible = true
+			
+			for file in DirAccess.get_files_at(PACKED_CONTENTS_DIRECTORY):
+				if file.ends_with(".pck") or file.ends_with(".zip"):
+					ProjectSettings.load_resource_pack(PACKED_CONTENTS_DIRECTORY.path_join(file))
+	
 	for folder in ResourceLoader.list_directory(CONTENTS_DIRECTORY):
 		if folder.ends_with("/"):
 			if ResourceLoader.exists(CONTENTS_DIRECTORY.path_join(folder + "content.tres")):

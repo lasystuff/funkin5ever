@@ -19,17 +19,15 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 	chart.stage = base.stage
 	chart.scroll_speed = base.scrollSpeed
 	
-	if base.noteTypes.size() < 1:
-		base.noteTypes.push_back("")
+	base.noteTypes.push_front("")
 	
 	for strumline in base.strumLines:
-		var is_player:bool = base.strumLines[0] != strumline
 		for base_note in strumline.notes:
 			var note_data:NoteData = NoteData.new()
 			note_data.time = base_note.time / 1000
 			note_data.column = base_note.id
 			note_data.length = base_note.sLen / 1000
-			note_data.type = base.noteTypes[base_note.type]
+			note_data.type = base.noteTypes[int(base_note.type)]
 			if base.strumLines.find(strumline) == 0: # opponent
 				note_data.player = NoteData.PlayerType.OPPONENT
 			else: # player
