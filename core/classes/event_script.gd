@@ -1,4 +1,4 @@
-extends GameScript
+extends SongScript
 class_name EventScript
 
 func _call_before_countdown() -> bool: return false

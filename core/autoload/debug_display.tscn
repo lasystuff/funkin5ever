@@ -9,7 +9,8 @@ outline_size = 6
 outline_color = Color(0, 0, 0, 1)
 
 [node name="debug_display" type="CanvasLayer" unique_id=1069649642]
-layer = 1000
+process_mode = 3
+layer = 2147483647
 script = ExtResource("1_ymqys")
 
 [node name="label" type="Label" parent="." unique_id=1619250455]

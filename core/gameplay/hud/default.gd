@@ -15,8 +15,9 @@ func _ready() -> void:
 			song_name = game.chart._song_id
 		song_text.text = "- %s [%s] -" % [song_name, game.chart._difficulty.to_upper()]
 	
+func _ready_post() -> void:
 	_reload_icon()
-	
+
 func _reload_icon() -> void:
 	if is_instance_valid(player_icon): player_icon.texture = game.player.health_icon
 	if is_instance_valid(opponent_icon): opponent_icon.texture = game.opponent.health_icon

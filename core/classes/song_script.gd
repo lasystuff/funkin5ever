@@ -1,5 +1,5 @@
 extends Node
-class_name GameScript
+class_name SongScript
 
 var game:Gameplay:
 	get():

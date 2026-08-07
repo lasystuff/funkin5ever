@@ -8,11 +8,11 @@ func _on_event_call(event:EventData):
 	
 	match target:
 		"opponent":
-			game.opponent.danceable = force
+			game.opponent.danceable = !force
 			game.opponent.play_anim(event.data.animation, force)
 		"spectator":
-			game.spectator.danceable = force
+			game.spectator.danceable = !force
 			game.spectator.play_anim(event.data.animation, force)
 		_:
-			game.player.danceable = force
+			game.player.danceable = !force
 			game.player.play_anim(event.data.animation, force)

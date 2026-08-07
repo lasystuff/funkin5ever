@@ -14,7 +14,11 @@ enum CharacterType
 @export var spectator_start_point:StageCharacterPosition
 
 @export_category("Camera")
-@export var camera_override:StageCamera
+@export var camera_override:Camera2D
+
+@export_category("Gameplay")
+@export var hud_scene:PackedScene = preload("res://core/gameplay/hud/default.tscn")
+@export var countdown_skin:CountdownSkin = preload("res://core/gameplay/countdown/default/skin.tres")
 
 func _init() -> void:
 	if Conductor.instance != null:
@@ -25,12 +29,20 @@ func _init() -> void:
 	if !is_instance_valid(opponent_start_point): opponent_start_point = StageCharacterPosition.new()
 	if !is_instance_valid(spectator_start_point): spectator_start_point = StageCharacterPosition.new()
 	
-func call_event(type:String, data:Dictionary = {}) -> void:
+func call_event(type:String, data:Dictionary) -> void:
 	if game != null:
-		var event = EventData.new()
+		var event:EventData = EventData.new()
 		event.type = type
-		event.data = data
+		event.data = data if data != null else {}
 		event.time = Conductor.instance.song_position
+		
+		# fuck me two month before
+		if !game.event_scripts.has(event.type):
+			var script_path = ContentManager.get_content_path("gameplay/events/" + event.type + ".gd")
+			if ResourceLoader.exists(script_path):
+				var script = load(script_path).new()
+				game.event_scripts.set(event.type, script)
+				game.scripts.push_back(script)
 		
 		for script in game.scripts:
 			script._on_event_call(event)

@@ -12,6 +12,7 @@ func switch_scene(scene:PackedScene, transition_scene:PackedScene = DEFAULT_TRAN
 		skip_out_transition = true
 		
 	var transition:TransitionScene = transition_scene.instantiate()
+	transition.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(transition)
 	if !skip_out_transition:
 		transition.trans_out(func():

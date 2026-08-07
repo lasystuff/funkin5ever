@@ -15,8 +15,6 @@ static var story_stats:GameStats = GameStats.new()
 static var game_mode:GameMode = GameMode.FREEPLAY
 static var return_scene:PackedScene = load("res://core/menu/freeplay/freeplay.tscn")
 
-var pause_scene:PackedScene = load("res://core/gameplay/pause_screen.tscn")
-
 var chart:Chart:
 	get():
 		return playlist[0]
@@ -34,27 +32,29 @@ var player:Character
 var opponent:Character
 var spectator:Character
 
-var hud_scene:PackedScene = load("res://core/gameplay/hud/default.tscn")
-var countdown_skin:CountdownSkin = load("res://core/gameplay/countdown/default/skin.tres")
+var pause_scene:PackedScene = load("res://core/gameplay/pause_screen.tscn")
 
 var camera_bop_interval:int = 4
 var camera_bop_mult:float = 1
 var camera_bop_add:float = 0
 var camera_zoom_mult:float = 1
-var camera_offset_scale:float = 10
+var camera_offset_scale:float = 3
 
-var song_started:bool = true
+var song_started:bool = false
 
-var scripts:Array[GameScript] = []
+var scripts:Array[SongScript] = []
 var event_scripts:Dictionary[String, EventScript] = {}
-var note_type_scripts:Dictionary[String, GameScript] = {}
+var note_type_scripts:Dictionary[String, SongScript] = {}
 
+@onready var hud_layer:CanvasLayer = $hud_layer
+@onready var default_camera:Camera2D = $camera
 @onready var audio:Node = %audio
+
+func _init() -> void:
+	instance = self
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	instance = self
-	
 	metadata = SongMetadata.get_from_id(chart._song_id)
 	events = chart.events.duplicate_deep(0)
 	
@@ -70,10 +70,10 @@ func _ready() -> void:
 			continue
 		var audio_player = AudioStreamPlayer.new()
 		audio_player.stream = load(song_folder.path_join(stream))
-		%audio.add_child(audio_player)
+		audio.add_child(audio_player)
 	
-	if %audio.get_child_count() > 0:
-		%audio.get_child(0).finished.connect(_song_finished)
+	if audio.get_child_count() > 0:
+		audio.get_child(0).finished.connect(_song_finished)
 		
 	# LOAD SCRIPTS
 	
@@ -130,8 +130,9 @@ func _ready() -> void:
 	%camera.position = lerp(player.get_camera_pos(), opponent.get_camera_pos(), 0.5)
 	%camera.zoom.x = stage.zoom
 	%camera.zoom.y = stage.zoom
+	%camera.enabled = !is_instance_valid(stage.camera_override)
 	
-	hud = hud_scene.instantiate()
+	hud = stage.hud_scene.instantiate()
 	$hud_layer.add_child(hud)
 
 	hud.player_strumline.scroll_speed = chart.scroll_speed
@@ -151,11 +152,6 @@ func _ready() -> void:
 		script._ready_post()
 	hud._ready_post()
 	stage._ready_post()
-	start_countdown()
-
-var current_countdown:int = 0
-func start_countdown() -> void:
-	conductor.song_position = -Conductor.instance.get_crotchet() * 5
 	
 	for event in events:
 		if event.time < 0.001 && event_scripts.has(event.type) && event_scripts.get(event.type)._call_before_countdown():
@@ -163,10 +159,28 @@ func start_countdown() -> void:
 				script._on_event_call(event)
 			events.erase(event)
 	
-	%countdown.scale = Vector2(countdown_skin.scale, countdown_skin.scale)
+	if auto_start:
+		start_countdown()
+
+var skip_countdown:bool = false
+var auto_start:bool = true
+
+var current_countdown:int = 0
+func start_countdown() -> void:
+	if skip_countdown:
+		song_started = true
+		for audio in audio.get_children(): audio.play()
+		for script in scripts:
+			script._on_song_start()
+		stage._on_song_start()
+		hud._on_song_start()
+		return
+	
+	conductor.song_position = -Conductor.instance.get_crotchet() * 5
 	
 	var countdown_timer:Timer = Timer.new()
 	add_child(countdown_timer)
+	var countdown_skin = stage.countdown_skin
 	countdown_timer.timeout.connect(func():
 		match current_countdown:
 			0: # three
@@ -194,7 +208,7 @@ func start_countdown() -> void:
 				countdown_timer.stop()
 				countdown_timer.queue_free()
 				song_started = true
-				for audio in %audio.get_children(): audio.play()
+				for audio in audio.get_children(): audio.play()
 				for script in scripts:
 					script._on_song_start()
 				stage._on_song_start()
@@ -203,16 +217,21 @@ func start_countdown() -> void:
 			for script in scripts:
 				script._on_countdown_beat(current_countdown)
 			stage._on_countdown_beat(current_countdown)
+			
+			if %countdown.visible:
+				%countdown.scale = Vector2(countdown_skin.scale + 0.03, countdown_skin.scale + 0.03)
+				var tween = get_tree().create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+				tween.tween_property(%countdown, "scale", Vector2(countdown_skin.scale, countdown_skin.scale), conductor.get_crotchet() * 0.5)
 		current_countdown += 1
 	)
 	countdown_timer.start(conductor.get_crotchet())
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if !%audio.get_children()[0].playing:
+	if !song_started:
 		conductor.song_position += delta
 	else:
-		var inst_time:float = (%audio.get_children()[0].get_playback_position() + AudioServer.get_time_since_last_mix() )
+		var inst_time:float = (audio.get_children()[0].get_playback_position() + AudioServer.get_time_since_last_mix() )
 		conductor.song_position = inst_time
 		
 		for event in events:
@@ -269,10 +288,11 @@ func _opponent_note_hit(note:Note, is_sustain_part:bool) -> void:
 
 var camera_tween:Tween
 func move_camera(_pos:Vector2, _speed:float, _trans:Variant = null, _ease:Variant = null):
+	if _camera_override_enabled(): return
 	if camera_tween != null:
 		camera_tween.kill()
 	if _speed <= 0:
-		_get_current_camera().global_position = _pos
+		%camera.global_position = _pos
 		return
 	
 	if _trans == null: _trans = Tween.TransitionType.TRANS_EXPO
@@ -280,7 +300,7 @@ func move_camera(_pos:Vector2, _speed:float, _trans:Variant = null, _ease:Varian
 	
 	camera_tween = get_tree().create_tween()
 	camera_tween.set_trans(_trans).set_ease(_ease)
-	camera_tween.tween_property(_get_current_camera(), "global_position", _pos, _speed)
+	camera_tween.tween_property(%camera, "global_position", _pos, _speed)
 
 var flash_tween:Tween
 func flash_camera(_speed:float, color:Color = Color.WHITE):
@@ -308,17 +328,21 @@ func move_camera_offset(direction:int):
 	if camera_offset_tween != null:
 		camera_offset_tween.kill()
 	
+	var current_camera = stage.camera_override if (is_instance_valid(stage.camera_override) && stage.camera_override.enabled) else %camera
+	
 	camera_offset_tween = get_tree().create_tween()
 	camera_offset_tween.set_trans(Tween.TransitionType.TRANS_EXPO).set_ease(Tween.EaseType.EASE_OUT)
-	camera_offset_tween.tween_property(_get_current_camera(), "offset", pos, 1.4)
+	camera_offset_tween.tween_property(current_camera, "offset", pos, 1.4)
 
 var zoom_tween:Tween
 func zoom_camera(_value:float, _speed:float, _trans:Variant = null, _ease:Variant = null):
+	if _camera_override_enabled(): return
+	
 	if zoom_tween != null:
 		zoom_tween.kill()
 	if _speed <= 0:
-		_get_current_camera().zoom.x = stage.zoom * _value
-		_get_current_camera().zoom.y = stage.zoom * _value
+		%camera.zoom.x = stage.zoom * _value
+		%camera.zoom.y = stage.zoom * _value
 		return
 	
 	if _trans == null: _trans = Tween.TransitionType.TRANS_EXPO
@@ -326,7 +350,7 @@ func zoom_camera(_value:float, _speed:float, _trans:Variant = null, _ease:Varian
 	
 	zoom_tween = get_tree().create_tween()
 	zoom_tween.set_trans(_trans).set_ease(_ease)
-	zoom_tween.tween_property(_get_current_camera(), "zoom", Vector2(stage.zoom * _value, stage.zoom * _value), _speed)
+	zoom_tween.tween_property(%camera, "zoom", Vector2(stage.zoom * _value, stage.zoom * _value), _speed)
 	
 func _on_exit() -> void:
 	for script in scripts:
@@ -354,8 +378,5 @@ func _song_finished() -> void:
 				Transition.switch_scene(return_scene)
 	Transition.switch_scene(return_scene)
 
-func _get_current_camera() -> Camera2D:
-	if is_instance_valid(stage.camera_override):
-		if stage.camera_override.override_movement:
-			return stage.camera_override
-	return %camera
+func _camera_override_enabled() -> bool:
+	return is_instance_valid(stage.camera_override) && stage.camera_override.enabled

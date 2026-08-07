@@ -5,7 +5,7 @@
 [node name="gameplay" type="Node2D" unique_id=2133785341]
 script = ExtResource("1_imtvj")
 
-[node name="camera" type="Camera2D" parent="." unique_id=1220773919]
+[node name="camera" type="Camera2D" parent="." unique_id=1774971756]
 unique_name_in_owner = true
 position = Vector2(640, 360)
 
