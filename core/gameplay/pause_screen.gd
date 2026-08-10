@@ -4,11 +4,11 @@ var current_item:int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if Gameplay.instance != null:
-		%song_name.text = Gameplay.instance.metadata.display_name if !Gameplay.instance.metadata.display_name.is_empty() else Gameplay.instance.chart._song_id
-		%difficulty.text = Gameplay.instance.chart._difficulty.to_upper()
-		%artist.text = "Artist: " + Gameplay.instance.metadata.artist if !Gameplay.instance.metadata.artist.is_empty() else "Artist: Unknown"
-		%charter.text = "Charter: " + Gameplay.instance.metadata.charter if !Gameplay.instance.metadata.charter.is_empty() else "Charter: Unknown"
+	if is_instance_valid(Song.current):
+		%song_name.text = Song.current.meta.display_name if !Song.current.meta.display_name.is_empty() else Song.current.chart._song_id
+		%difficulty.text = Song.current.chart._difficulty.to_upper()
+		%artist.text = "Artist: " + Song.current.meta.artist if !Song.current.meta.artist.is_empty() else "Artist: Unknown"
+		%charter.text = "Charter: " + Song.current.meta.charter if !Song.current.meta.charter.is_empty() else "Charter: Unknown"
 	change_item(0, false)
 	
 func change_item(change:int = 0, lerp:bool = true) -> void:
@@ -31,15 +31,15 @@ func _process(delta: float) -> void:
 			"restart":
 				get_tree().paused = false
 				get_parent().process_mode = Node.PROCESS_MODE_DISABLED
-				Gameplay.instance._on_exit()
-				Transition.switch_scene(load("res://core/gameplay/gameplay.tscn"))
+				Song.current._on_exit()
+				Transition.switch_scene(load(Song.current.scene_file_path))
 			"options":
 				pass
 			"exit":
 				get_tree().paused = false
 				get_parent().process_mode = Node.PROCESS_MODE_DISABLED
-				Gameplay.instance._on_exit()
-				Transition.switch_scene(Gameplay.return_scene)
+				Song.current._on_exit()
+				Transition.switch_scene(Song.return_scene)
 	
 	for item in %items.get_children():
 		item.modulate.a = 1 if item.get_index() == current_item else 0.5

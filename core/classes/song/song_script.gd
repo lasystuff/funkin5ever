@@ -1,13 +1,10 @@
-extends Node
+extends Node2D
 class_name SongScript
 
-var game:Gameplay:
-	get():
-		return Gameplay.instance
-
 func _init() -> void:
-	Conductor.instance.step_hit.connect(_on_step_hit)
-	Conductor.instance.beat_hit.connect(_on_beat_hit)
+	if is_instance_valid(Conductor.instance):
+		Conductor.instance.step_hit.connect(_on_step_hit)
+		Conductor.instance.beat_hit.connect(_on_beat_hit)
 
 func _ready() -> void: pass
 func _ready_post() -> void: pass
@@ -24,9 +21,6 @@ func _on_song_start() -> void: pass
 func _on_step_hit(step:int) -> void: pass
 @warning_ignore("unused_parameter")
 func _on_beat_hit(beat:int) -> void: pass
-
-@warning_ignore("unused_parameter")
-func _on_event_call(event:EventData): pass
 
 @warning_ignore("unused_parameter")
 func _on_note_hit(note:Note, strumline:Strumline, judge:String = "sick"): pass

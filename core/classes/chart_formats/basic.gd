@@ -6,11 +6,9 @@ func check_format(song:String, difficulty:String = "normal") -> bool: return fal
 
 @warning_ignore("unused_parameter")
 func get_chart(song:String, difficulty:String = "normal") -> Chart: return Chart.new()
-@warning_ignore("unused_parameter")
-func get_metadata(song:String) -> SongMetadata: return SongMetadata.new()
 
 static func get_raw_chart(song:String, difficulty:String = "normal") -> Dictionary:
-	var folder = ContentManager.get_content_path("gameplay/songs/" + song)
+	var folder = ContentManager.get_content_path("gameplay/songs/" + song + "/charts")
 	if ResourceLoader.exists(folder.path_join(difficulty + ".json")): # hard.json
 		return load(folder.path_join(difficulty + ".json")).data
 	if ResourceLoader.exists(folder.path_join(song + "-" + difficulty + ".json")): # song_name-hard.json
@@ -26,7 +24,7 @@ static func get_raw_chart(song:String, difficulty:String = "normal") -> Dictiona
 	return {}
 
 static func get_raw_meta(song:String) -> Dictionary:
-	var folder = ContentManager.get_content_path("gameplay/songs/" + song)
+	var folder = ContentManager.get_content_path("gameplay/songs/" + song + "/charts")
 	if ResourceLoader.exists(folder.path_join("meta.json")): # meta.json
 		return load(folder.path_join("meta.json")).data
 	elif ResourceLoader.exists(folder.path_join("metadata.json")): # metadata.json
@@ -37,7 +35,7 @@ static func get_raw_meta(song:String) -> Dictionary:
 
 # IS THAT IT????? REALLY????
 static func get_raw_events(song:String) -> Dictionary:
-	var folder = ContentManager.get_content_path("gameplay/songs/" + song)
+	var folder = ContentManager.get_content_path("gameplay/songs/" + song + "/charts")
 	if ResourceLoader.exists(folder.path_join("events.json")): # events.json
 		return load(folder.path_join("events.json")).data
 	return {}

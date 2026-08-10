@@ -31,12 +31,12 @@ func _process(delta: float) -> void:
 		controllable = false
 		ContentManager.current_content = %songs.get_child(current_item).content_id
 		
-		Gameplay.playlist = [Chart.get_from_id(%songs.get_child(current_item).song_id)]
-		Gameplay.game_mode = Gameplay.GameMode.FREEPLAY
-		Gameplay.return_scene = load(self.scene_file_path)
-		
 		GlobalSound.play_sfx(preload("res://core/menu/confirm.ogg"))
-		Transition.switch_scene(load("res://core/gameplay/gameplay.tscn"))
+
+		Song.game_mode = Song.GameMode.FREEPLAY
+		Song.return_scene = load(self.scene_file_path)
+		
+		Song.start_playlist([%songs.get_child(current_item).song_id])
 	elif Input.is_action_just_pressed("ui_mod_manager") && controllable:
 		controllable = false
 		Transition.switch_scene(load("res://core/menu/contents_menu/contents_menu.tscn"))
