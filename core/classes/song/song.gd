@@ -25,7 +25,8 @@ static var return_scene:PackedScene
 @export_category("Theme")
 @export var hud_scene:PackedScene = preload("res://core/gameplay/hud/default.tscn")
 @export var countdown_skin:CountdownSkin = preload("res://core/gameplay/countdown/default/skin.tres")
-@export var pause_scene:PackedScene = load("res://core/gameplay/pause_screen.tscn")
+@export var pause_scene:PackedScene = preload("res://core/gameplay/pause_screen.tscn")
+@export var death_scene = preload("res://core/gameplay/death/death_screen.tscn")
 
 var camera_bop_interval:int = 4
 
@@ -59,6 +60,11 @@ func _init() -> void:
 	current = self
 
 func _ready() -> void:
+	# fix when trying to run from editor directly
+	if playlist.size() < 1:
+		var song = self.scene_file_path.split("/")[self.scene_file_path.split("/").size() - 2]
+		playlist.push_back(SongMetadata.get_from_id(song))
+	
 	conductor = Conductor.new()
 	add_child(conductor)
 	conductor.beat_hit.connect(_on_beat_hit)
@@ -147,6 +153,15 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_pause"):
 		var pause = pause_scene.instantiate()
 		add_child(pause)
+		get_tree().paused = true
+
+	if Input.is_action_just_pressed("debug_kill"):
+		stats.health = 0
+	
+	if stats.health == 0:
+		hud_layer.visible = false
+		var death = death_scene.instantiate()
+		add_child(death)
 		get_tree().paused = true
 
 func _on_beat_hit(beat:int) -> void:

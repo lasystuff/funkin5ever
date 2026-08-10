@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dxbedciha4u6p"]
+
+[ext_resource type="Script" uid="uid://kmc1vs7uop73" path="res://core/gameplay/death/death_screen.gd" id="1_4c8sf"]
+
+[node name="death_screen" type="Node2D" unique_id=1669132689]
+process_mode = 2
+z_index = 50
+script = ExtResource("1_4c8sf")
+
+[node name="death" type="AudioStreamPlayer" parent="." unique_id=1857115195]
+unique_name_in_owner = true
+
+[node name="loop" type="AudioStreamPlayer" parent="." unique_id=397203257]
+unique_name_in_owner = true
+
+[node name="confirm" type="AudioStreamPlayer" parent="." unique_id=1830227933]
+unique_name_in_owner = true
+
+[node name="parallax_2d" type="Parallax2D" parent="." unique_id=1533498701]
+
+[node name="bg" type="ColorRect" parent="parallax_2d" unique_id=365004802]
+offset_right = 6400.0
+offset_bottom = 3600.0
+color = Color(0, 0, 0, 1)

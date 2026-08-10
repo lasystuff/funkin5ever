@@ -1,0 +1,30 @@
+[
+	{
+		"name": "plugin/quick_notes/defaults/default_path",
+		"type": 4,
+		"hint": 13,
+		"default": "res://notes.txt"
+	},
+	{
+		"name": "plugin/quick_notes/defaults/default_tab",
+		"type": 2,
+		"hint": 2,
+		"hint_string": "Edit,Preview",
+		"default": 0
+	},
+	{
+		"name": "plugin/quick_notes/formatting/bullet_point_text",
+		"type": 4,
+		"default": "•"
+	},
+	{
+		"name": "plugin/quick_notes/checkboxes/cross_out_completed",
+		"type": 1,
+		"default": false
+	},
+	{
+		"name": "plugin/quick_notes/checkboxes/grey_out_completed",
+		"type": 1,
+		"default": true
+	}
+]

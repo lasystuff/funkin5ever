@@ -17,8 +17,9 @@ var health:float = 1:
 	set(value):
 		if value > 2:
 			health = 2
-		else:
-			health = value
+		elif value < 0:
+			value = 0
+		health = value
 
 var sicks:int = 0
 var goods:int = 0

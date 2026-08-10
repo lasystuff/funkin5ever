@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://bf7qcsvak5qk1"]
+
+[ext_resource type="Script" uid="uid://cefrnn8uk5nq0" path="res://addons/quick_notes_dock/interface/interface.gd" id="1_g1uf6"]
+[ext_resource type="Script" uid="uid://bhnn158aav08i" path="res://addons/quick_notes_dock/syntax_highlighter.gd" id="2_uk00g"]
+
+[sub_resource type="SyntaxHighlighter" id="SyntaxHighlighter_0hovd"]
+script = ExtResource("2_uk00g")
+metadata/_custom_type_script = "uid://bhnn158aav08i"
+
+[node name="QuickNotes" type="Panel" unique_id=1971560977]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g1uf6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=999109833]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EditTabs" type="TabContainer" parent="VBoxContainer" unique_id=1984255220]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+tab_alignment = 2
+current_tab = 1
+tabs_position = 1
+
+[node name="Edit" type="TextEdit" parent="VBoxContainer/EditTabs" unique_id=506827808]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+text = "- [x] Add lobby ui (replaces lobby rooms)
+- [x] Add wind effect to moving potato
+- [x] Fix cam modifiers
+- [x] Add ability for map helper to auto-center a map
+- [ ] Add prickly circle cactus that catches the potato
+- [ ] Update main menu with new capsule art as bg
+	buttons on the left, with the logo in the top-right, add large \"Play\" for steam and smaller
+- [ ] Add [code]GlyphControl[/code] to other menus in the game"
+placeholder_text = "Replace with your notes :]
+
+P.S. lines starting with [code]`-`[/code], [code]`- [ ]`[/code], and [code]`- [x]`[/code] will be formatted in the \"Preview\" tab
+
+Also supports [rainbow sat=0.3][wave]BBCode[/wave][/rainbow]
+
+Version 1.1.0:
+	- Updated for new 4.7 Asset Store
+	- Made checkboxes clickable in \"Preview\" tab
+	- Fixed syntax highlighting
+	- Added gutter checkboxes to \"Edit\" tab
+	- Added \"Show file in filesystem\" button
+Version 1.0.0:
+	- Released the plugin <3"
+wrap_mode = 1
+indent_wrapped_lines = true
+scroll_smooth = true
+caret_blink = true
+syntax_highlighter = SubResource("SyntaxHighlighter_0hovd")
+highlight_all_occurrences = true
+draw_tabs = true
+metadata/_tab_index = 0
+
+[node name="Preview" type="RichTextLabel" parent="VBoxContainer/EditTabs" unique_id=1921848064]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 2
+theme_override_constants/line_separation = 3
+bbcode_enabled = true
+selection_enabled = true
+metadata/_tab_index = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=578692847]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 340.0
+grow_vertical = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 2
+
+[node name="ToolBar" type="HBoxContainer" parent="MarginContainer" unique_id=735036285]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="Save" type="Button" parent="MarginContainer/ToolBar" unique_id=846110697]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Save to default path (autosaves on exit)"
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/ToolBar" unique_id=384127458]
+layout_mode = 2
+
+[node name="ShowInFileSystem" type="Button" parent="MarginContainer/ToolBar" unique_id=2107879662]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Show file in FileSystem"
+
+[connection signal="tab_changed" from="VBoxContainer/EditTabs" to="." method="_on_edit_tabs_tab_changed"]
+[connection signal="gutter_clicked" from="VBoxContainer/EditTabs/Edit" to="." method="_on_edit_gutter_clicked"]
+[connection signal="text_changed" from="VBoxContainer/EditTabs/Edit" to="." method="_on_edit_text_changed"]
+[connection signal="meta_clicked" from="VBoxContainer/EditTabs/Preview" to="." method="_on_preview_meta_clicked"]
+[connection signal="pressed" from="MarginContainer/ToolBar/Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="MarginContainer/ToolBar/ShowInFileSystem" to="." method="_on_show_in_file_system_pressed"]
