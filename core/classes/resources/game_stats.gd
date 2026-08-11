@@ -53,7 +53,7 @@ func get_clear_rating() -> String:
 		return "GFC"
 	elif misses == 0:
 		return "FC"
-	elif combo_breaks == 0:
+	elif combo_breaks < 2:
 		return "SDCB"
 	return "Clear"
 

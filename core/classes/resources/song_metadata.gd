@@ -7,7 +7,7 @@ class_name SongMetadata
 @export var artist:String = ""
 @export var charter:String = ""
 @export_category("Extra")
-@export var extra_data:Dictionary = {}
+@export var extra_data:Dictionary[String, Variant] = {}
 
 var _song_id:String = ""
 

@@ -74,7 +74,7 @@ func _ready() -> void:
 	
 	stats = GameStats.new()
 	
-	animation_player.animation_finished.connect(_song_finished)
+	animation_player.animation_finished.connect(func(_n): _song_finished())
 	
 	for script_file in scripts:
 		var instance = script_file.new() as SongScript
@@ -113,7 +113,7 @@ func start_countdown() -> void:
 	song_started = true
 
 func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
-	player.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
+	if is_instance_valid(player): player.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
 	if !is_sustain_part:
 		var judge = stats.score_note(note)
 		for script in scripts:
@@ -121,7 +121,7 @@ func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
 		hud._on_note_hit(note, note.strumline, judge)
 	
 func _player_note_miss(note:Note, type:Strumline.MissType) -> void:
-	if player.has_animation(note.sing_animations[note.data.column] + "_miss"):
+	if is_instance_valid(player) && player.has_animation(note.sing_animations[note.data.column] + "_miss"):
 		player.play_anim(note.sing_animations[note.data.column] + "_miss", true)
 	if type == Strumline.MissType.NOTE_MISS:
 		stats.miss_note()
@@ -130,7 +130,7 @@ func _player_note_miss(note:Note, type:Strumline.MissType) -> void:
 		hud._on_note_miss(note, note.strumline)
 	
 func _opponent_note_hit(note:Note, is_sustain_part:bool) -> void:
-	opponent.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
+	if is_instance_valid(opponent): opponent.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
 	if !is_sustain_part:
 		for script in scripts:
 			script._on_note_hit(note, note.strumline)
@@ -146,9 +146,6 @@ func _process(delta: float) -> void:
 	
 	for script in loaded_scripts:
 		script._process(delta)
-		
-	var bop = lerpf(1, hud.scale.x, exp(-delta * 3.125))
-	hud.scale = Vector2(bop, bop)
 	
 	if Input.is_action_just_pressed("ui_pause"):
 		var pause = pause_scene.instantiate()
@@ -164,9 +161,14 @@ func _process(delta: float) -> void:
 		add_child(death)
 		get_tree().paused = true
 
+var zoom_tween:Tween
 func _on_beat_hit(beat:int) -> void:
 	if beat % camera_bop_interval == 0:
+		if is_instance_valid(zoom_tween):
+			zoom_tween.kill()
 		hud.scale += Vector2(0.02, 0.02)
+		zoom_tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+		zoom_tween.tween_property(hud, "scale", Vector2.ONE, conductor.get_crotchet() * camera_bop_interval)
 
 func _on_exit() -> void:
 	for script in loaded_scripts:

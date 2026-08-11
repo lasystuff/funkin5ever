@@ -29,4 +29,4 @@ func _process(_delta: float) -> void:
 	
 	if self.playing:
 		if abs((get_playback_position() + AudioServer.get_time_since_last_mix()) - animation_player.current_animation_position) > 0.045:
-			self.seek(animation_player.current_animation_position)
+			self.seek(animation_player.current_animation_position + AudioServer.get_time_since_last_mix() - AudioServer.get_output_latency())

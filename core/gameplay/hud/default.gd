@@ -19,8 +19,8 @@ func _ready_post() -> void:
 	_reload_icon()
 
 func _reload_icon() -> void:
-	if is_instance_valid(player_icon): player_icon.texture = Song.current.player.health_icon
-	if is_instance_valid(opponent_icon): opponent_icon.texture = Song.current.opponent.health_icon
+	if is_instance_valid(player_icon) && is_instance_valid(Song.current.player): player_icon.texture = Song.current.player.health_icon
+	if is_instance_valid(opponent_icon) && is_instance_valid(Song.current.opponent): opponent_icon.texture = Song.current.opponent.health_icon
 
 func _update_score():
 	if is_instance_valid(score_text):
@@ -30,11 +30,6 @@ func _process(delta:float) -> void:
 	_update_score()
 	if is_instance_valid(health_bar):
 		health_bar.value = Song.current.stats.health
-	
-	# from psych engine
-	var mult:float = lerpf(1, player_icon.scale.x, exp(-delta * 9))
-	player_icon.scale = Vector2(Song.current.player.health_icon_scale * mult, Song.current.player.health_icon_scale * mult)
-	opponent_icon.scale = Vector2(Song.current.opponent.health_icon_scale * mult, Song.current.opponent.health_icon_scale * mult)
 	
 	if is_instance_valid(health_bar):
 		var bar_pos = health_bar.global_position.x + health_bar.size.x * (1.0 - remap(health_bar.value, 0, 2, 0, 1))
@@ -51,10 +46,23 @@ func _update_icon_states() -> void:
 func _on_beat_hit(beat:int) -> void:
 	_bop_icon(beat)
 
+var icon_tween:Tween
+
 func _bop_icon(beat:int) -> void:
 	if beat % 2 == 0:
-		if is_instance_valid(player_icon): player_icon.scale = Vector2(1.2, 1.2)
-		if is_instance_valid(opponent_icon): opponent_icon.scale = Vector2(1.2, 1.2)
+		if is_instance_valid(icon_tween): icon_tween.kill()
+		
+		var player_scale: float = Song.current.player.health_icon_scale if is_instance_valid(Song.current.player) else 1
+		var opponent_scale: float = Song.current.opponent.health_icon_scale if is_instance_valid(Song.current.opponent) else 1
+		
+		icon_tween = get_tree().create_tween().set_parallel(true).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		
+		if is_instance_valid(player_icon):
+			player_icon.scale = Vector2(player_scale * 1.14, player_scale * 1.14)
+			icon_tween.tween_property(player_icon, "scale", Vector2(player_scale, player_scale), Conductor.instance.get_crotchet())
+		if is_instance_valid(opponent_icon):
+			opponent_icon.scale = Vector2(opponent_scale * 1.14, opponent_scale * 1.14)
+			icon_tween.tween_property(opponent_icon, "scale", Vector2(player_scale, player_scale), Conductor.instance.get_crotchet())
 
 func _on_note_hit(note:Note, strumline:Strumline, judge:String = "sick"):
 	if !is_instance_valid(judgement_display):
