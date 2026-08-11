@@ -40,9 +40,13 @@ func _process(delta:float) -> void:
 		var bar_pos = health_bar.global_position.x + health_bar.size.x * (1.0 - remap(health_bar.value, 0, 2, 0, 1))
 		if is_instance_valid(player_icon): player_icon.global_position.x = bar_pos + 50
 		if is_instance_valid(opponent_icon): opponent_icon.global_position.x = bar_pos - 50
-	
-	if is_instance_valid(player_icon): player_icon.frame = 1 if Song.current.stats.health < 0.4 else 0
-	if is_instance_valid(opponent_icon): opponent_icon.frame = 1 if Song.current.stats.health > 1.6 else 0
+
+func _update_icon_states() -> void:
+	if is_instance_valid(player_icon):
+		player_icon.frame = 1 if Song.current.stats.health < 0.4 else 0
+	if is_instance_valid(opponent_icon):
+		opponent_icon.frame = 1 if Song.current.stats.health > 1.6 else 0
+
 
 func _on_beat_hit(beat:int) -> void:
 	_bop_icon(beat)

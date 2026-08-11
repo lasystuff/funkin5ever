@@ -113,7 +113,7 @@ func start_countdown() -> void:
 	song_started = true
 
 func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
-	player.play_anim(note.sing_animations[note.data.column], true)
+	player.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
 	if !is_sustain_part:
 		var judge = stats.score_note(note)
 		for script in scripts:
@@ -130,7 +130,7 @@ func _player_note_miss(note:Note, type:Strumline.MissType) -> void:
 		hud._on_note_miss(note, note.strumline)
 	
 func _opponent_note_hit(note:Note, is_sustain_part:bool) -> void:
-	opponent.play_anim(note.sing_animations[note.data.column], true)
+	opponent.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
 	if !is_sustain_part:
 		for script in scripts:
 			script._on_note_hit(note, note.strumline)

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bxa4e551dppe4"]
+
+[ext_resource type="Script" uid="uid://duig0w086bb2h" path="res://core/menu/main_menu/menu_item.gd" id="1_e82sq"]
+[ext_resource type="SpriteFrames" uid="uid://c5toe44kw7kxc" path="res://core/menu/main_menu/items/storymode.xml" id="1_hg0t5"]
+
+[node name="menu_item" type="Control" unique_id=1881294291]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_e82sq")
+
+[node name="sprite" type="AnimatedSprite2D" parent="." unique_id=1101713349]
+position = Vector2(384, 64)
+sprite_frames = ExtResource("1_hg0t5")
+animation = &"storymode idle"

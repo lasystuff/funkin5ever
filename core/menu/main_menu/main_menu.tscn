@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://cninvoe0pf2v3"]
+
+[ext_resource type="Texture2D" uid="uid://bk4usuu6jpe3c" path="res://core/menu/bg.png" id="1_yhfgr"]
+[ext_resource type="PackedScene" uid="uid://bxa4e551dppe4" path="res://core/menu/main_menu/menu_item.tscn" id="2_5xc64"]
+[ext_resource type="FontFile" uid="uid://bqhu0u6tgswpv" path="res://core/fonts/vcr.ttf" id="2_38wqk"]
+[ext_resource type="SpriteFrames" uid="uid://5ggl0ef1tqyt" path="res://core/menu/main_menu/items/freeplay.xml" id="3_yafa7"]
+[ext_resource type="SpriteFrames" uid="uid://b7ny8f2stw1ul" path="res://core/menu/main_menu/items/credits.xml" id="4_kko2k"]
+[ext_resource type="SpriteFrames" uid="uid://cd0jg42pcgbf7" path="res://core/menu/main_menu/items/options.xml" id="5_flcew"]
+
+[node name="main_menu" type="Node2D" unique_id=1490366467]
+
+[node name="parallax_2d" type="Parallax2D" parent="." unique_id=553155548]
+scroll_scale = Vector2(0.1, 0.1)
+
+[node name="bg" type="Sprite2D" parent="parallax_2d" unique_id=1381168629]
+position = Vector2(640, 360)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("1_yhfgr")
+
+[node name="v_box_container" type="VBoxContainer" parent="." unique_id=1148261677]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 256.0
+offset_right = 1024.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 120
+alignment = 1
+
+[node name="story" parent="v_box_container" unique_id=1881294291 instance=ExtResource("2_5xc64")]
+layout_mode = 2
+idle_animation = "story idle"
+selected_animation = "story selected"
+
+[node name="freeplay" parent="v_box_container" unique_id=368788684 instance=ExtResource("2_5xc64")]
+layout_mode = 2
+idle_animation = "freeplay idle"
+selected_animation = "freeplay selected"
+
+[node name="sprite" parent="v_box_container/freeplay" index="0" unique_id=1101713349]
+sprite_frames = ExtResource("3_yafa7")
+animation = &"freeplay idle"
+
+[node name="credits" parent="v_box_container" unique_id=1350372644 instance=ExtResource("2_5xc64")]
+layout_mode = 2
+idle_animation = "credits idle"
+selected_animation = "credits selected"
+
+[node name="sprite" parent="v_box_container/credits" index="0" unique_id=1101713349]
+sprite_frames = ExtResource("4_kko2k")
+animation = &"credits idle"
+
+[node name="options" parent="v_box_container" unique_id=1397456903 instance=ExtResource("2_5xc64")]
+layout_mode = 2
+idle_animation = "options idle"
+selected_animation = "options selected"
+
+[node name="sprite" parent="v_box_container/options" index="0" unique_id=1101713349]
+sprite_frames = ExtResource("5_flcew")
+animation = &"options idle"
+
+[node name="camera_2d" type="Camera2D" parent="." unique_id=995484251]
+position = Vector2(640, 360)
+
+[node name="info" type="CanvasLayer" parent="." unique_id=565330861]
+
+[node name="label" type="Label" parent="info" unique_id=58245605]
+offset_left = 8.0
+offset_top = 664.0
+offset_right = 392.0
+offset_bottom = 712.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_38wqk")
+theme_override_font_sizes/font_size = 16
+text = "funkin5ever v0.0.1
+Press TAB to open Content Manager"
+vertical_alignment = 2
+
+[editable path="v_box_container/freeplay"]
+[editable path="v_box_container/credits"]
+[editable path="v_box_container/options"]
