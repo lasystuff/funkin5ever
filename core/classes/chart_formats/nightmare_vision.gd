@@ -25,7 +25,7 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 			data.time = base_data[0] / 1000
 			data.column = int(base_data[1]) % 4
 			data.length = base_data[2] / 1000
-			data.type = base_data[3] if base_data.size() > 3 else ""
+			data.type = base_data[3] if base_data.size() > 3 and base_data[3] is String else ""
 			if base_data[1] > 3:
 				data.player = NoteData.PlayerType.OPPONENT
 			else:

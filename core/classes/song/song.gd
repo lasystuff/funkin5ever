@@ -47,6 +47,8 @@ var hud:HUD
 var song_started:bool = false
 var stats:GameStats
 
+var player_vocal:SongStreamPlayer
+
 static func start_playlist(_playlist:Array[String]) -> void:
 	playlist = []
 	for song in _playlist:
@@ -101,6 +103,13 @@ func _ready() -> void:
 			NoteData.PlayerType.OPPONENT:
 				hud.opponent_strumline.note_queues.push_back(note)
 	
+	if is_instance_valid(animation_player.find_child("player", false)):
+		if animation_player.find_child("player", false) is SongStreamPlayer:
+			player_vocal = animation_player.find_child("player", false)
+	elif is_instance_valid(animation_player.find_child("vocal", false)):
+		if animation_player.find_child("vocal", false) is SongStreamPlayer:
+			player_vocal = animation_player.find_child("vocal", false)
+	
 	for script in loaded_scripts:
 		script._ready_post()
 	hud._ready_post()
@@ -144,6 +153,7 @@ func _start_song() -> void:
 
 func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
 	if is_instance_valid(player): player.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
+	if is_instance_valid(player_vocal): player_vocal.volume_linear = 1
 	if !is_sustain_part:
 		var judge = stats.score_note(note)
 		for script in loaded_scripts:
@@ -153,6 +163,7 @@ func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
 func _player_note_miss(note:Note, type:Strumline.MissType) -> void:
 	if is_instance_valid(player) && player.has_animation(note.sing_animations[note.data.column] + "_miss"):
 		player.play_anim(note.sing_animations[note.data.column] + "_miss", true)
+	if is_instance_valid(player_vocal): player_vocal.volume_linear = 0
 	if type == Strumline.MissType.NOTE_MISS:
 		stats.miss_note()
 		for script in loaded_scripts:
