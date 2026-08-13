@@ -31,8 +31,12 @@ func _process(delta:float) -> void:
 	if is_instance_valid(health_bar):
 		health_bar.value = Song.current.stats.health
 	
+	_update_icon_positions()
+	_update_icon_states()
+
+func _update_icon_positions() -> void:
 	if is_instance_valid(health_bar):
-		var bar_pos = health_bar.global_position.x + health_bar.size.x * (1.0 - remap(health_bar.value, 0, 2, 0, 1))
+		var bar_pos: float = health_bar.global_position.x + health_bar.size.x * (1.0 - remap(health_bar.value, 0, 2, 0, 1))
 		if is_instance_valid(player_icon): player_icon.global_position.x = bar_pos + 50
 		if is_instance_valid(opponent_icon): opponent_icon.global_position.x = bar_pos - 50
 
@@ -64,13 +68,13 @@ func _bop_icon(beat:int) -> void:
 			opponent_icon.scale = Vector2(opponent_scale * 1.14, opponent_scale * 1.14)
 			icon_tween.tween_property(opponent_icon, "scale", Vector2(player_scale, player_scale), Conductor.instance.get_crotchet())
 
-func _on_note_hit(note:Note, strumline:Strumline, judge:String = "sick"):
+func _on_note_hit(_note:Note, strumline:Strumline, judge:String = "sick"):
 	if !is_instance_valid(judgement_display):
 		return
 	if strumline == player_strumline:
 		judgement_display.show_judgement(judge, Song.current.stats.combo)
 
-func _on_note_miss(note:Note, strumline:Strumline):
+func _on_note_miss(_note:Note, strumline:Strumline):
 	if !is_instance_valid(judgement_display):
 		return
 	if strumline == player_strumline:

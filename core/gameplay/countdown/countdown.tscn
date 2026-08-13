@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://i3dxktyerl2r"]
+
+[ext_resource type="Script" uid="uid://bpvt52d6l1vji" path="res://core/gameplay/countdown/countdown.gd" id="1_j78va"]
+
+[node name="countdown" type="Control" unique_id=1680028695]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j78va")
+
+[node name="sprite" type="Sprite2D" parent="." unique_id=804003212]
+unique_name_in_owner = true
+
+[node name="sound" type="AudioStreamPlayer" parent="." unique_id=1230466611]
+unique_name_in_owner = true

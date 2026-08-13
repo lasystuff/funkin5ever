@@ -65,12 +65,12 @@ tint_under = Color(1, 0, 0, 1)
 tint_progress = Color(0, 1, 0, 1)
 
 [node name="opponent_icon" type="Sprite2D" parent="health_bar" unique_id=1277568248]
-position = Vector2(304, 8)
+position = Vector2(256, 8)
 texture = ExtResource("3_a730s")
 hframes = 2
 
 [node name="player_icon" type="Sprite2D" parent="health_bar" unique_id=1566947375]
-position = Vector2(304, 8)
+position = Vector2(344, 8)
 texture = ExtResource("3_a730s")
 flip_h = true
 hframes = 2
@@ -114,7 +114,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="player_strumline" parent="." unique_id=318479143 instance=ExtResource("4_2kr0o")]
-modulate = Color(1, 1, 1, 0.8)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -128,7 +127,6 @@ botplay = false
 play_note_splashes = true
 
 [node name="opponent_strumline" parent="." unique_id=2050830637 instance=ExtResource("4_2kr0o")]
-modulate = Color(1, 1, 1, 0.8)
 layout_mode = 0
 offset_left = 96.0
 offset_top = 48.0

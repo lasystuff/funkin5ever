@@ -32,10 +32,10 @@ func reload_data():
 	self.state = NoteState.NEUTRAL
 	
 	var skin_path:String = ContentManager.get_content_path("gameplay/notes/" + data.type + "/skin.tres")
-	if DirAccess.dir_exists_absolute(skin_path):
-		self.skin = load(skin_path)
+	if FileAccess.file_exists(skin_path):
+		skin = load(skin_path)
 	else:
-		self.skin = strumline.skin
+		skin = strumline.skin
 	
 	self.sprite_frames = skin.note_frames
 	self.play(skin.note_animations[data.column])

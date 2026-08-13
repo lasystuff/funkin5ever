@@ -17,6 +17,8 @@ static var return_scene:PackedScene
 @export var animation_player:AnimationPlayer
 @export var scripts:Array[GDScript] = []
 
+@export var skip_countdown:bool = false
+
 @export_category("Character")
 @export var player:Character
 @export var opponent:Character
@@ -103,20 +105,48 @@ func _ready() -> void:
 		script._ready_post()
 	hud._ready_post()
 	
-	start_countdown()
+	_start_countdown()
 	
-func start_countdown() -> void:
-	if animation_player.is_playing():
-		song_started = true
+func _start_countdown() -> void:
+	if skip_countdown:
+		_start_song()
 		return
+	
+	conductor.song_position = -conductor.get_crotchet() * 5
+	var countdown:Countdown = preload("res://core/gameplay/countdown/countdown.tscn").instantiate() as Countdown
+	countdown.skin = countdown_skin
+	hud_layer.add_child(countdown)
+	
+	countdown.countdown_step.connect(func(step:int):
+		if is_instance_valid(player):
+			player.beat_hit(step)
+		if is_instance_valid(opponent):
+			opponent.beat_hit(step)
+		if is_instance_valid(spectator):
+			spectator.beat_hit(step)
+		for script in loaded_scripts:
+			script._on_countdown_beat(step)
+		hud._on_countdown_beat(step)
+	)
+	
+	countdown.countdown_finished.connect(_start_song)
+	
+	countdown.start()
+
+func _start_song() -> void:
 	animation_player.play("song")
+		
+	for script in loaded_scripts:
+		script._on_song_start()
+	hud._on_song_start()
+	
 	song_started = true
 
 func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
 	if is_instance_valid(player): player.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
 	if !is_sustain_part:
 		var judge = stats.score_note(note)
-		for script in scripts:
+		for script in loaded_scripts:
 			script._on_note_hit(note, note.strumline, judge)
 		hud._on_note_hit(note, note.strumline, judge)
 	
@@ -125,14 +155,14 @@ func _player_note_miss(note:Note, type:Strumline.MissType) -> void:
 		player.play_anim(note.sing_animations[note.data.column] + "_miss", true)
 	if type == Strumline.MissType.NOTE_MISS:
 		stats.miss_note()
-		for script in scripts:
+		for script in loaded_scripts:
 			script._on_note_miss(note, note.strumline)
 		hud._on_note_miss(note, note.strumline)
 	
 func _opponent_note_hit(note:Note, is_sustain_part:bool) -> void:
 	if is_instance_valid(opponent): opponent.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
 	if !is_sustain_part:
-		for script in scripts:
+		for script in loaded_scripts:
 			script._on_note_hit(note, note.strumline)
 		hud._on_note_hit(note, note.strumline)
 	
@@ -173,7 +203,7 @@ func _on_beat_hit(beat:int) -> void:
 func _on_exit() -> void:
 	for script in loaded_scripts:
 		script.queue_free()
-		scripts.erase(script)
+		loaded_scripts.erase(script)
 
 func _song_finished() -> void:
 	for script in loaded_scripts:
