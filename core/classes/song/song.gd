@@ -18,6 +18,7 @@ static var return_scene:PackedScene
 @export var scripts:Array[GDScript] = []
 
 @export var skip_countdown:bool = false
+@export var camera_bop_interval:int = 4
 
 @export_category("Character")
 @export var player:Character
@@ -29,8 +30,6 @@ static var return_scene:PackedScene
 @export var countdown_skin:CountdownSkin = preload("res://core/gameplay/countdown/default/skin.tres")
 @export var pause_scene:PackedScene = preload("res://core/gameplay/pause_screen.tscn")
 @export var death_scene = preload("res://core/gameplay/death/death_screen.tscn")
-
-var camera_bop_interval:int = 4
 
 var conductor:Conductor
 
@@ -78,7 +77,16 @@ func _ready() -> void:
 	
 	stats = GameStats.new()
 	
-	animation_player.animation_finished.connect(func(_n): _song_finished())
+	animation_player.animation_finished.connect(func(n):
+		match n:
+			"intro_cutscene":
+				_start_countdown()
+			"song":
+				_song_finished()
+			"end_cutscene":
+				_song_exit()
+			
+	)
 	
 	for script_file in scripts:
 		var instance = script_file.new() as SongScript
@@ -114,7 +122,10 @@ func _ready() -> void:
 		script._ready_post()
 	hud._ready_post()
 	
-	_start_countdown()
+	if animation_player.has_animation("intro_cutscene"):
+		animation_player.play("intro_cutscene")
+	else:
+		_start_countdown()
 	
 func _start_countdown() -> void:
 	if skip_countdown:
@@ -209,14 +220,20 @@ func _on_beat_hit(beat:int) -> void:
 			zoom_tween.kill()
 		hud.scale += Vector2(0.02, 0.02)
 		zoom_tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-		zoom_tween.tween_property(hud, "scale", Vector2.ONE, conductor.get_crotchet() * camera_bop_interval)
+		zoom_tween.tween_property(hud, "scale", Vector2.ONE, conductor.get_crotchet() * 4)
 
 func _on_exit() -> void:
 	for script in loaded_scripts:
 		script.queue_free()
 		loaded_scripts.erase(script)
-
+	
 func _song_finished() -> void:
+	if animation_player.has_animation("end_cutscene"):
+		animation_player.play("end_cutscene")
+	else:
+		_song_exit()
+
+func _song_exit() -> void:
 	for script in loaded_scripts:
 		script._on_song_finish()
 	hud._on_song_finish()

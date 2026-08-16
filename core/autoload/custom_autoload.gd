@@ -2,6 +2,9 @@ extends Node
 
 var autoloads:Array[Node] = []
 
+func _ready() -> void:
+	reload()
+
 func reload() -> void:
 	for autoload in autoloads:
 		autoload.free()
