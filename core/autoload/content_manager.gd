@@ -48,12 +48,13 @@ func _init() -> void:
 	contents.sort_custom(func(a:ContentMetadata, b:ContentMetadata):
 		var a_index:int = 999
 		var b_index:int = 1000
-		for save in SaveData.data.content_list:
+		var list = Config.get_config("content_list")
+		for save in list:
 			if save.id == a.id:
-				a_index = SaveData.data.content_list.find(save)
+				a_index = list.find(save)
 				a.enabled = save.enabled
 			elif save.id == b.id:
-				b_index = SaveData.data.content_list.find(save)
+				b_index = list.find(save)
 				b.enabled = save.enabled
 		return true
 	)
