@@ -199,7 +199,7 @@ func _process(delta: float) -> void:
 	for script in loaded_scripts:
 		script._process(delta)
 	
-	if Input.is_action_just_pressed("ui_pause"):
+	if Input.is_action_just_pressed("ui_accept"):
 		var pause = pause_scene.instantiate()
 		add_child(pause)
 		get_tree().paused = true

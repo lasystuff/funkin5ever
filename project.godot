@@ -51,6 +51,10 @@ folder_colors={
 
 [input]
 
+ui_mod_manager={
+"deadzone": 0.2,
+"events": []
+}
 note_left={
 "deadzone": 0.05,
 "events": []
@@ -67,15 +71,7 @@ note_right={
 "deadzone": 0.05,
 "events": []
 }
-ui_pause={
-"deadzone": 0.2,
-"events": []
-}
 debug_switch={
-"deadzone": 0.2,
-"events": []
-}
-ui_mod_manager={
 "deadzone": 0.2,
 "events": []
 }

@@ -18,7 +18,7 @@ class_name Keybinds
 @export var debug_kill:int = KEY_R
 @export var debug_switch:int = KEY_F3
 
-func load_binds() -> void:
+func reload_binds() -> void:
 	for action in get_property_list():
 		if action.type == TYPE_INT && action.hint_string.is_empty():
 			var event = InputEventKey.new()

@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 		change_item(1)
 	elif Input.is_action_just_pressed("ui_accept") && controllable:
 		%contents.get_child(current_item).button_pressed = !%contents.get_child(current_item).button_pressed
-	elif Input.is_action_just_pressed("ui_cancel"):
+	elif Input.is_action_just_pressed("ui_cancel") && controllable:
 		controllable = false
 		
 		var has_global:bool = false

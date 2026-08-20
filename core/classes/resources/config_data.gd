@@ -29,7 +29,7 @@ func migrate() -> void:
 	self.version = DEFAULT_CONFIG_VERSION
 	
 func _on_load() -> void:
-	keybinds.load_binds()
+	keybinds.reload_binds()
 
 func _on_save() -> void:
 	content_list = ContentManager.create_list_save()
