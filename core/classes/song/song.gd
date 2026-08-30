@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 class_name Song
 
@@ -31,6 +32,11 @@ static var return_scene:PackedScene
 @export var pause_scene:PackedScene = preload("res://core/gameplay/pause_screen.tscn")
 @export var death_scene = preload("res://core/gameplay/death/death_screen.tscn")
 
+@export_category("Tools")
+@export_tool_button("Convert Camera Events To KeyFrame") var _import_camera_events:Callable = import_camera_events
+@export_category("Extra")
+@export var extra_data:Dictionary[String, Variant] = {}
+
 var conductor:Conductor
 
 var chart:Chart
@@ -52,17 +58,21 @@ static func start_playlist(_playlist:Array[String]) -> void:
 	playlist = []
 	for song in _playlist:
 		var song_meta:SongMetadata = SongMetadata.get_from_id(song)
-		if is_instance_valid(song_meta.scene):
+		if is_instance_valid(song_meta.get_scene()):
 			playlist.push_back(song_meta)
 	if playlist.size() > 0:
-		Transition.switch_scene(playlist[0].scene)
+		Transition.switch_scene(playlist[0].get_scene())
 	else:
 		print("[SONG] Playlist is empty, cannot start the game!")
 
 func _init() -> void:
+	if Engine.is_editor_hint():
+		return
 	current = self
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	# fix when trying to run from editor directly
 	if playlist.size() < 1:
 		var song = self.scene_file_path.split("/")[self.scene_file_path.split("/").size() - 2]
@@ -72,7 +82,7 @@ func _ready() -> void:
 	add_child(conductor)
 	conductor.beat_hit.connect(_on_beat_hit)
 	
-	chart = Chart.get_from_id(meta._song_id, "normal")
+	chart = meta.get_chart()
 	conductor.set_bpm_changes(chart.bpm_changes)
 	
 	stats = GameStats.new()
@@ -163,7 +173,7 @@ func _start_song() -> void:
 	song_started = true
 
 func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
-	if is_instance_valid(player): player.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
+	if is_instance_valid(player): player.play_anim(note.sing_animations[note.data.column], !is_sustain_part if !player.sustain_nimble else true)
 	if is_instance_valid(player_vocal): player_vocal.volume_linear = 1
 	if !is_sustain_part:
 		var judge = stats.score_note(note)
@@ -182,13 +192,15 @@ func _player_note_miss(note:Note, type:Strumline.MissType) -> void:
 		hud._on_note_miss(note, note.strumline)
 	
 func _opponent_note_hit(note:Note, is_sustain_part:bool) -> void:
-	if is_instance_valid(opponent): opponent.play_anim(note.sing_animations[note.data.column], !is_sustain_part)
+	if is_instance_valid(opponent): opponent.play_anim(note.sing_animations[note.data.column], !is_sustain_part if !opponent.sustain_nimble else true)
 	if !is_sustain_part:
 		for script in loaded_scripts:
 			script._on_note_hit(note, note.strumline)
 		hud._on_note_hit(note, note.strumline)
 	
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	if animation_player.is_playing():
 		if !song_started:
 			song_started = true
@@ -245,7 +257,7 @@ func _song_exit() -> void:
 				story_stats = GameStats.new()
 			if playlist.size() > 1:
 				playlist.pop_front()
-				Transition.switch_scene(playlist[0].scene)
+				Transition.switch_scene(playlist[0].get_scene())
 			else:
 				story_stats = null
 				Transition.switch_scene(return_scene)
@@ -253,3 +265,39 @@ func _song_exit() -> void:
 			#GameMode.FREEPLAY
 			story_stats = null
 			Transition.switch_scene(return_scene)
+
+func import_camera_events() -> void:
+	if !Engine.is_editor_hint():
+		return
+	if !self.extra_data.has("player_camera_position") or !self.extra_data.has("opponent_camera_position"):
+		print("add 'player_camera_position' and 'opponent_camera_position' to extra data, to convert camera events properly!")
+		return
+	
+	var new_meta:SongMetadata = load(self.scene_file_path.replace("song.tscn", "meta.tres"))
+	if !is_instance_valid(self.animation_player):
+		print("AnimationPlayer is not assigned!")
+		return
+		
+	var camera:Camera2D
+	
+	for child in self.get_children():
+		if child is Camera2D:
+			camera = child as Camera2D
+			break
+	if !is_instance_valid(camera):
+		print("Cannot find main camera!")
+		return
+	
+	# ok so we can finally convert shitz
+	var new_chart:Chart = new_meta.get_chart()
+	var song_animation:Animation = animation_player.get_animation("song")
+	
+	var camera_track:int = song_animation.add_track(Animation.TYPE_VALUE, 0)
+	song_animation.track_set_path(camera_track, NodePath(String(self.get_path_to(camera)) + ":position"))
+	
+	var prev_position:Vector2 = camera.position
+	for marker in new_chart._camera_movement_markers:
+		var target:Vector2 = extra_data.get("player_camera_position") if marker.get("focus_player") else extra_data.get("opponent_camera_position")
+		song_animation.track_insert_key(camera_track, marker.get("time"), prev_position, 0.5)
+		song_animation.track_insert_key(camera_track, marker.get("time") + 1.1, target, 0)
+		prev_position = target

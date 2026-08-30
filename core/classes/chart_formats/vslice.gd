@@ -1,17 +1,17 @@
 extends BasicChart
 class_name VSliceChart
 
-func check_format(song:String, difficulty:String = "normal") -> bool:
-	var base = get_raw_chart(song, difficulty)
+func check_format(chart_path:String, difficulty:String = "normal") -> bool:
+	var base = get_raw_chart(chart_path, difficulty)
 	if base.has("hard") or base.has("easy") or base.has("normal") or base.has("erect"):
 		return true
 	elif base.has("generatedBy") and base.generatedBy.contains("Friday Night Funkin'"):
 		return true
 	return false
 
-func get_chart(song:String, difficulty:String = "normal") -> Chart:
-	var base = BasicChart.get_raw_chart(song, difficulty)
-	var meta = BasicChart.get_raw_meta(song)
+func get_chart(chart_path:String, difficulty:String = "normal") -> Chart:
+	var base = BasicChart.get_raw_chart(chart_path, difficulty)
+	var meta = BasicChart.get_raw_meta(chart_path)
 	var chart = Chart.new()
 	
 	for original_change in meta.timeChanges:

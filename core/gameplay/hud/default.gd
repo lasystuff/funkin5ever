@@ -54,6 +54,7 @@ var icon_tween:Tween
 
 func _bop_icon(beat:int) -> void:
 	if beat % 2 == 0:
+		if !is_instance_valid(player_icon) && !is_instance_valid(opponent_icon): return
 		if is_instance_valid(icon_tween): icon_tween.kill()
 		
 		var player_scale: float = Song.current.player.health_icon_scale if is_instance_valid(Song.current.player) else 1

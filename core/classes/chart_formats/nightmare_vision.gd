@@ -8,8 +8,8 @@ func check_format(song:String, difficulty:String = "normal") -> bool:
 			return true
 	return false
 
-func get_chart(song:String, difficulty:String = "normal") -> Chart:
-	var base = BasicChart.get_raw_chart(song, difficulty).song
+func get_chart(chart_path:String, difficulty:String = "normal") -> Chart:
+	var base = BasicChart.get_raw_chart(chart_path, difficulty).song
 	var chart = Chart.new()
 	
 	var section_time:float = 0
@@ -26,12 +26,13 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 			data.column = int(base_data[1]) % 4
 			data.length = base_data[2] / 1000
 			data.type = base_data[3] if base_data.size() > 3 and base_data[3] is String else ""
-			if base_data[1] > 3:
-				data.player = NoteData.PlayerType.OPPONENT
-			else:
-				data.player = NoteData.PlayerType.PLAYER
+			data.player = NoteData.PlayerType.OPPONENT if int(base_data[1]) > 3 else NoteData.PlayerType.PLAYER
 			
 			chart.notes.push_back(data)
+		
+		if section.mustHitSection != prev_must_hit:
+			chart._camera_movement_markers.push_back({"time": section_time, "focus_player": section.mustHitSection})
+			prev_must_hit = section.mustHitSection
 		
 		if section.get("changeBPM", false):
 			chart.bpm_changes.push_back(BPMChange.new(section_time, section.bpm))

@@ -14,6 +14,7 @@ class_name Character
 @export_custom(PROPERTY_HINT_LINK, "suffix:BPM") var death_music_bpm:float = 100
 
 @export_category("Extra")
+@export var sustain_nimble:bool = false
 @export var extra_data:Dictionary[String, Variant] = {}
 
 var last_sing_beat:int = -1000

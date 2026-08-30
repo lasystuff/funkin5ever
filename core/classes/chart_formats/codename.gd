@@ -9,9 +9,9 @@ func check_format(song:String, difficulty:String = "normal") -> bool:
 		return true
 	return false
 
-func get_chart(song:String, difficulty:String = "normal") -> Chart:
-	var base = BasicChart.get_raw_chart(song, difficulty)
-	var meta = BasicChart.get_raw_meta(song)
+func get_chart(chart_path:String, difficulty:String = "normal") -> Chart:
+	var base = BasicChart.get_raw_chart(chart_path, difficulty)
+	var meta = BasicChart.get_raw_meta(chart_path)
 	var chart = Chart.new()
 	
 	chart.bpm_changes.push_back(BPMChange.new(0, meta.bpm))
@@ -32,12 +32,14 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 				note_data.player = NoteData.PlayerType.PLAYER
 			chart.notes.push_back(note_data)
 	
-	var base_events = BasicChart.get_raw_events(song)
+	var base_events = BasicChart.get_raw_events(chart_path)
 	if base_events.has("events"):
 		base.events.append_array(base_events)
 		
 	for base_event in base.events:
 		if base_event.name == "Change BPM":
 			chart.bpm_changes.push_back(BPMChange.new(base_event.time / 1000, base_event.args[0]))
+		elif base_event.name == "Camera Movement":
+			chart._camera_movement_markers.push_back({"time": base_event.time / 1000, "focus_player": base_event.args[0] != 0})
 	
 	return chart

@@ -1,17 +1,17 @@
 extends BasicChart
 class_name PsychChart
 
-func check_format(song:String, difficulty:String = "normal") -> bool:
-	var base = get_raw_chart(song, difficulty)
+func check_format(chart_path:String, difficulty:String = "normal") -> bool:
+	var base = get_raw_chart(chart_path, difficulty)
 	if base.has("format") && base.format.begins_with("psych_v1"):
 		return true
 	elif base.has("song") && base.song is not String: #legacy
 		return true
 	return false
 
-func get_chart(song:String, difficulty:String = "normal") -> Chart:
+func get_chart(chart_path:String, difficulty:String = "normal") -> Chart:
 	var legacy:bool = false
-	var base = BasicChart.get_raw_chart(song, difficulty)
+	var base = BasicChart.get_raw_chart(chart_path, difficulty)
 	if base.song is not String: # legacy format
 		legacy = true
 		base = base.song
@@ -46,6 +46,10 @@ func get_chart(song:String, difficulty:String = "normal") -> Chart:
 					data.player = NoteData.PlayerType.OPPONENT
 			
 			chart.notes.push_back(data)
+		
+		if section.mustHitSection != prev_must_hit:
+			chart._camera_movement_markers.push_back({"time": section_time, "focus_player": section.mustHitSection})
+			prev_must_hit = section.mustHitSection
 		
 		if section.get("changeBPM", false):
 			chart.bpm_changes.push_back(BPMChange.new(section_time, section.bpm))
