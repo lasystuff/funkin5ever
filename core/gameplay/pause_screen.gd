@@ -34,7 +34,11 @@ func _process(delta: float) -> void:
 				Song.current._on_exit()
 				Transition.switch_scene(load(Song.current.scene_file_path))
 			"options":
-				pass
+				get_tree().paused = false
+				get_parent().process_mode = Node.PROCESS_MODE_DISABLED
+				Song.current._on_exit()
+				MainConfigMenu.return_scene = load(Song.current.scene_file_path)
+				Transition.switch_scene(load("res://core/menu/config_menu/main_config.tscn"))
 			"exit":
 				get_tree().paused = false
 				get_parent().process_mode = Node.PROCESS_MODE_DISABLED

@@ -40,6 +40,6 @@ func get_chart(chart_path:String, difficulty:String = "normal") -> Chart:
 		if base_event.name == "Change BPM":
 			chart.bpm_changes.push_back(BPMChange.new(base_event.time / 1000, base_event.args[0]))
 		elif base_event.name == "Camera Movement":
-			chart._camera_movement_markers.push_back({"time": base_event.time / 1000, "focus_player": base_event.args[0] != 0})
+			chart._camera_movement_markers.push_back({"time": base_event.time / 1000, "focus_player": (base_event.args[0] if base_event.has("args") && base_event.args.size() > 0 else 0) != 0})
 	
 	return chart

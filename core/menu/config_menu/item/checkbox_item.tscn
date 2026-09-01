@@ -15,7 +15,6 @@ label = NodePath("label")
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_7kb67")
 theme_override_font_sizes/font_size = 80
-text = "DOWNSCROLL"
 
 [node name="checkbox" parent="." unique_id=1978211430 instance=ExtResource("2_6eqt5")]
 layout_mode = 2

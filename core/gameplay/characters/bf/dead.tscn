@@ -173,6 +173,7 @@ _data = {
 
 [node name="bf-dead" type="Node2D" unique_id=353933422 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_gbm0h")
+character_type = 2
 dance_animations = Array[String]([])
 animation_player = NodePath("animation_player")
 

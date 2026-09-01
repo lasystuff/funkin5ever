@@ -20,6 +20,8 @@ enum MissType
 
 @onready var strums:Array[Node2D] = [%left, %down, %up, %right]
 
+var down_scroll:bool = false
+
 var inputs:Array[String] = ["note_left", "note_down", "note_up", "note_right"]
 var note_queues:Array[NoteData] = []
 var scroll_speed:float = 1
@@ -62,7 +64,10 @@ func _process(delta: float) -> void:
 	
 	for note in %notes.get_children():
 		note.global_position.x = strums[note.data.column].global_position.x
-		note.global_position.y = strums[note.data.column].global_position.y - (Conductor.instance.song_position - note.data.time) * (scroll_speed * 450)
+		var offset:float = (Conductor.instance.song_position - note.data.time) * (scroll_speed * 450)
+		if down_scroll:
+			offset *= -1
+		note.global_position.y = strums[note.data.column].global_position.y - offset
 		if botplay && note.data.time <= Conductor.instance.song_position && note.state == Note.NoteState.HITTABLE:
 			note_hit.emit(note, false)
 		

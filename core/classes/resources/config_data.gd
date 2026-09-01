@@ -13,6 +13,7 @@ enum ShaderOption
 @export var version:int = DEFAULT_CONFIG_VERSION
 
 # config Variables
+@export var down_scroll:bool = false
 @export var middle_scroll:bool = false
 @export var keybinds:Keybinds = Keybinds.new()
 
@@ -20,6 +21,8 @@ enum ShaderOption
 @export var shaders:ShaderOption = ShaderOption.ALL
 
 @export var content_list:Array[Dictionary] = []
+
+@export var extra_config:Dictionary[String, Variant] = {}
 
 func migrate() -> void:
 	match self.version:

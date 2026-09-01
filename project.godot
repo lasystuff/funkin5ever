@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 Global="*uid://dobuvw6gp0yw"
 Config="*uid://dpnferl37rk5d"
+Save="*uid://jarjem31iody"
 ContentManager="*uid://djbq3bruhu5op"
 Transition="*uid://dy7jbeha3jknu"
 GlobalSound="*uid://bo71bsekno06o"

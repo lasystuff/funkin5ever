@@ -56,7 +56,9 @@ func _init() -> void:
 			elif save.id == b.id:
 				b_index = list.find(save)
 				b.enabled = save.enabled
-		return true
+		if a_index < b_index:
+			return true
+		return false
 	)
 	
 func get_current_content():

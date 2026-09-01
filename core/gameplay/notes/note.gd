@@ -53,6 +53,12 @@ func reload_data():
 		3:
 			%sustain.texture = skin.sustain_frame_right
 			%tail.texture = skin.sustain_frame_right_end
+	
+	if strumline.down_scroll:
+		%clip_rect.rotation = deg_to_rad(180)
+	else:
+		%clip_rect.rotation = 0
+		#self.rotation
 
 func _process(delta: float) -> void:
 	if data.length > 0:

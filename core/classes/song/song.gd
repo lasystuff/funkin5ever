@@ -11,6 +11,7 @@ enum GameMode
 
 static var current:Song
 static var playlist:Array[SongMetadata] = []
+static var story_level:String
 static var story_stats:GameStats
 static var game_mode:GameMode = GameMode.FREEPLAY
 static var return_scene:PackedScene
@@ -56,9 +57,7 @@ signal _before_ready_post # I'M GOING INSANE
 static func start_playlist(_playlist:Array[String]) -> void:
 	playlist = []
 	for song in _playlist:
-		var song_meta:SongMetadata = SongMetadata.get_from_id(song)
-		if is_instance_valid(song_meta.get_scene()):
-			playlist.push_back(song_meta)
+		playlist.push_back(SongMetadata.get_from_id(song))
 	if playlist.size() > 0:
 		Transition.switch_scene(playlist[0].get_scene())
 	else:
@@ -252,13 +251,17 @@ func _song_exit() -> void:
 				story_stats = GameStats.new()
 			if playlist.size() > 1:
 				playlist.pop_front()
+				story_stats.score += stats.score
 				Transition.switch_scene(playlist[0].get_scene())
 			else:
+				Save.scores.set(story_level + ":" + chart._difficulty, story_stats)
+				Save.save()
 				story_stats = null
 				Transition.switch_scene(return_scene)
-		_:
-			#GameMode.FREEPLAY
+		_: #GameMode.FREEPLAY
 			story_stats = null
+			Save.scores.set(meta._song_id + ":" + chart._difficulty, stats)
+			Save.save()
 			Transition.switch_scene(return_scene)
 
 func import_camera_events() -> void:

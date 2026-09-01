@@ -8,11 +8,14 @@ func _init() -> void:
 func get_config(id:String, default_value:Variant = null) -> Variant:
 	if id in data:
 		return data.get(id)
+	if id in data.extra_config:
+		return data.extra_config.get(id)
 	return default_value
 
 func set_config(id:String, value:Variant) -> void:
 	if id in data:
 		data.set(id, value)
+	data.extra_config.set(id, value)
 
 func load_config() -> void:
 	if FileAccess.file_exists("user://save"):
