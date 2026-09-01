@@ -19,14 +19,14 @@ func _ready_post() -> void:
 	_reload_icon()
 
 func _reload_icon() -> void:
-	if is_instance_valid(player_icon) && is_instance_valid(Song.current.player): player_icon.texture = Song.current.player.health_icon
-	if is_instance_valid(opponent_icon) && is_instance_valid(Song.current.opponent): opponent_icon.texture = Song.current.opponent.health_icon
+	if is_instance_valid(player_icon) && player_strumline.characters.size() > 0: player_icon.texture = player_strumline.characters[0].health_icon
+	if is_instance_valid(opponent_icon) && opponent_strumline.characters.size() > 0: opponent_icon.texture = opponent_strumline.characters[0].health_icon
 
 func _update_score():
 	if is_instance_valid(score_text):
 		score_text.text = "Score: %s • Accuracy: %s [%s] • Combo Breaks: %s" % [Song.current.stats.score, str(floor(Song.current.stats.accuracy)) + "%", Song.current.stats.get_clear_rating(), Song.current.stats.combo_breaks]
 
-func _process(delta:float) -> void:
+func _process(_delta:float) -> void:
 	_update_score()
 	if is_instance_valid(health_bar):
 		health_bar.value = Song.current.stats.health
@@ -57,8 +57,8 @@ func _bop_icon(beat:int) -> void:
 		if !is_instance_valid(player_icon) && !is_instance_valid(opponent_icon): return
 		if is_instance_valid(icon_tween): icon_tween.kill()
 		
-		var player_scale: float = Song.current.player.health_icon_scale if is_instance_valid(Song.current.player) else 1
-		var opponent_scale: float = Song.current.opponent.health_icon_scale if is_instance_valid(Song.current.opponent) else 1
+		var player_scale: float = player_strumline.characters[0].health_icon_scale if player_strumline.characters.size() > 0 else 1.0
+		var opponent_scale: float = opponent_strumline.characters[0].health_icon_scale if opponent_strumline.characters.size() > 0 else 1.0
 		
 		icon_tween = get_tree().create_tween().set_parallel(true).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 		

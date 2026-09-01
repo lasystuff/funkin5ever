@@ -16,6 +16,8 @@ enum MissType
 @export var botplay:bool = true
 @export var play_note_splashes:bool = false
 
+@export var characters:Array[Character] = []
+
 @onready var strums:Array[Node2D] = [%left, %down, %up, %right]
 
 var inputs:Array[String] = ["note_left", "note_down", "note_up", "note_right"]
@@ -91,6 +93,11 @@ func _process(delta: float) -> void:
 
 func _note_hit(note:Note, is_sustain_part:bool) -> void:
 	strums[note.data.column].play(skin.strum_confirm_animations[note.data.column])
+	
+	for character in characters:
+		if character.has_animation(note.sing_animations[note.data.column]):
+			character.play_anim(note.sing_animations[note.data.column], !is_sustain_part if !character.sustain_nimble else true)
+	
 	if note.state == Note.NoteState.HITTABLE:
 		if note.data.length > 0:
 			note.clip_rect.clip_contents = true
@@ -114,4 +121,7 @@ func _note_hit(note:Note, is_sustain_part:bool) -> void:
 			return
 
 func _note_miss(note:Note, type:MissType) -> void:
+	for character in characters:
+		if character.has_animation(note.sing_animations[note.data.column] + "_miss"):
+			character.play_anim(note.sing_animations[note.data.column] + "_miss", true)
 	note_pool.add_to_pool(note)

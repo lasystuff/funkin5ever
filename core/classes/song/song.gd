@@ -21,11 +21,6 @@ static var return_scene:PackedScene
 @export var skip_countdown:bool = false
 @export var camera_bop_interval:int = 4
 
-@export_category("Character")
-@export var player:Character
-@export var opponent:Character
-@export var spectator:Character
-
 @export_category("Theme")
 @export var hud_scene:PackedScene = preload("res://core/gameplay/hud/default.tscn")
 @export var countdown_skin:CountdownSkin = preload("res://core/gameplay/countdown/default/skin.tres")
@@ -33,6 +28,7 @@ static var return_scene:PackedScene
 @export var death_scene = preload("res://core/gameplay/death/death_screen.tscn")
 
 @export_category("Tools")
+@warning_ignore("unused_private_class_variable")
 @export_tool_button("Convert Camera Events To KeyFrame") var _import_camera_events:Callable = import_camera_events
 @export_category("Extra")
 @export var extra_data:Dictionary[String, Variant] = {}
@@ -48,11 +44,14 @@ var loaded_scripts:Array[SongScript] = []
 
 var hud_layer:CanvasLayer
 var hud:HUD
+var countdown:Countdown
 
 var song_started:bool = false
 var stats:GameStats
 
 var player_vocal:SongStreamPlayer
+
+signal _before_ready_post # I'M GOING INSANE
 
 static func start_playlist(_playlist:Array[String]) -> void:
 	playlist = []
@@ -110,9 +109,11 @@ func _ready() -> void:
 	
 	hud.player_strumline.scroll_speed = chart.scroll_speed
 	hud.player_strumline.note_hit.connect(_player_note_hit)
+	hud.player_strumline.note_miss.connect(_default_note_miss)
 	hud.player_strumline.note_miss.connect(_player_note_miss)
 	hud.opponent_strumline.scroll_speed = chart.scroll_speed
 	hud.opponent_strumline.note_hit.connect(_opponent_note_hit)
+	hud.opponent_strumline.note_miss.connect(_default_note_miss)
 	
 	for note in chart.notes:
 		match note.player:
@@ -128,9 +129,16 @@ func _ready() -> void:
 		if animation_player.find_child("vocal", false) is SongStreamPlayer:
 			player_vocal = animation_player.find_child("vocal", false)
 	
-	for script in loaded_scripts:
-		script._ready_post()
-	hud._ready_post()
+	countdown = preload("res://core/gameplay/countdown/countdown.tscn").instantiate() as Countdown
+	countdown.skin = countdown_skin
+	
+	countdown.countdown_step.connect(func(step:int):
+		for script in loaded_scripts:
+			script._on_countdown_beat(step)
+		hud._on_countdown_beat(step)
+	)
+	
+	_before_ready_post.emit()
 	
 	if animation_player.has_animation("intro_cutscene"):
 		animation_player.play("intro_cutscene")
@@ -138,29 +146,18 @@ func _ready() -> void:
 		_start_countdown()
 	
 func _start_countdown() -> void:
+	for script in loaded_scripts:
+		script._ready_post()
+	hud._ready_post()
+	
 	if skip_countdown:
 		_start_song()
 		return
 	
 	conductor.song_position = -conductor.get_crotchet() * 5
-	var countdown:Countdown = preload("res://core/gameplay/countdown/countdown.tscn").instantiate() as Countdown
-	countdown.skin = countdown_skin
-	hud_layer.add_child(countdown)
-	
-	countdown.countdown_step.connect(func(step:int):
-		if is_instance_valid(player):
-			player.beat_hit(step)
-		if is_instance_valid(opponent):
-			opponent.beat_hit(step)
-		if is_instance_valid(spectator):
-			spectator.beat_hit(step)
-		for script in loaded_scripts:
-			script._on_countdown_beat(step)
-		hud._on_countdown_beat(step)
-	)
 	
 	countdown.countdown_finished.connect(_start_song)
-	
+	hud_layer.add_child(countdown)
 	countdown.start()
 
 func _start_song() -> void:
@@ -172,8 +169,12 @@ func _start_song() -> void:
 	
 	song_started = true
 
+func _default_note_miss(note:Note, _type:Strumline.MissType) -> void:
+	for script in loaded_scripts:
+		script._on_note_miss(note, note.strumline)
+	hud._on_note_miss(note, note.strumline)
+
 func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
-	if is_instance_valid(player): player.play_anim(note.sing_animations[note.data.column], !is_sustain_part if !player.sustain_nimble else true)
 	if is_instance_valid(player_vocal): player_vocal.volume_linear = 1
 	if !is_sustain_part:
 		var judge = stats.score_note(note)
@@ -181,18 +182,12 @@ func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
 			script._on_note_hit(note, note.strumline, judge)
 		hud._on_note_hit(note, note.strumline, judge)
 	
-func _player_note_miss(note:Note, type:Strumline.MissType) -> void:
-	if is_instance_valid(player) && player.has_animation(note.sing_animations[note.data.column] + "_miss"):
-		player.play_anim(note.sing_animations[note.data.column] + "_miss", true)
+func _player_note_miss(_note:Note, type:Strumline.MissType) -> void:
 	if is_instance_valid(player_vocal): player_vocal.volume_linear = 0
 	if type == Strumline.MissType.NOTE_MISS:
 		stats.miss_note()
-		for script in loaded_scripts:
-			script._on_note_miss(note, note.strumline)
-		hud._on_note_miss(note, note.strumline)
 	
 func _opponent_note_hit(note:Note, is_sustain_part:bool) -> void:
-	if is_instance_valid(opponent): opponent.play_anim(note.sing_animations[note.data.column], !is_sustain_part if !opponent.sustain_nimble else true)
 	if !is_sustain_part:
 		for script in loaded_scripts:
 			script._on_note_hit(note, note.strumline)

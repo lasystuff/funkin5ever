@@ -1,6 +1,7 @@
 extends Node2D
 class_name Character
 
+@export var character_type:NoteData.PlayerType = NoteData.PlayerType.PLAYER
 @export var dance_animations:Array[String] = ["idle"]
 @export var animation_player:AnimationPlayer
 
@@ -20,12 +21,32 @@ class_name Character
 var last_sing_beat:int = -1000
 var danceable:bool = true
 
+var strumline:Strumline:
+	set(value):
+		if is_instance_valid(strumline):
+			if strumline.characters.has(self):
+				strumline.characters.erase(self)
+		strumline = value
+		if is_instance_valid(strumline):
+			strumline.characters.push_back(self)
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if Song.current != null: await Song.current.ready
+	if Song.current != null: await Song.current._before_ready_post
 		
-	if Conductor.instance != null:
+	if is_instance_valid(Conductor.instance):
 		Conductor.instance.beat_hit.connect(beat_hit)
+	if is_instance_valid(Song.current.countdown):
+		Song.current.countdown.countdown_step.connect(beat_hit)
+		
+	match character_type:
+		NoteData.PlayerType.PLAYER:
+			strumline = Song.current.hud.player_strumline
+		NoteData.PlayerType.OPPONENT:
+			strumline = Song.current.hud.opponent_strumline
+			
+	if is_instance_valid(strumline):
+		strumline.characters.push_back(self)
 
 	if dance_animations.size() > 1:
 		dance_thing = 1
@@ -48,6 +69,8 @@ func beat_hit(beat:int) -> void:
 				dance_index = 0
 
 func has_animation(anim:String) -> bool:
+	if animation_player == null:
+		return false
 	return animation_player.has_animation(anim)
 
 func play_anim(anim:String, force:bool = false):
@@ -59,3 +82,6 @@ func play_anim(anim:String, force:bool = false):
 	animation_player.play(anim)
 	if animation_player.current_animation.begins_with("sing_"):
 		last_sing_beat = Conductor.instance.current_beat
+
+func _exit_tree() -> void:
+	strumline = null
