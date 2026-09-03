@@ -30,4 +30,8 @@ func get_chart(chart_path:String, difficulty:String = "normal") -> Chart:
 			note_data.player = NoteData.PlayerType.PLAYER
 		chart.notes.push_back(note_data)
 	
+	for event in base.events:
+		if event.e == "FocusCamera":
+			chart._camera_movement_markers.push_back({"time": event.t, "focus_player": event.v.get("c", 0) == 0})
+	
 	return chart

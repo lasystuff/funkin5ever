@@ -11,29 +11,29 @@ var camera:Camera2D
 var controllable:bool = true
 
 func _ready() -> void:
-	if !is_instance_valid(Song.current.player):
+	if Song.current.hud.player_strumline.characters.size() < 1:
 		print("[Death Screen] Current player is invalid! Can't start death screen.")
 		return
 	
-	character = Song.current.player.death_character.instantiate()
+	var origin_character:Character = Song.current.hud.player_strumline.characters[0]
+	character = origin_character.death_character.instantiate()
 	add_child(character)
-	character.global_position = Song.current.player.global_position
+	character.global_position = origin_character.global_position
 	
 	conductor = Conductor.new(false)
-	conductor.set_bpm_changes([BPMChange.new(0, Song.current.player.death_music_bpm)])
+	conductor.set_bpm_changes([BPMChange.new(0, character.death_music_bpm)])
 	
 	conductor.beat_hit.connect(_beat_hit)
 	
-	death_player.stream = load(ContentManager.get_content_path("gameplay/death/death_intro" + Song.current.player.death_music_postfix + ".ogg"))
-	loop_player.stream = load(ContentManager.get_content_path("gameplay/death/death_loop" + Song.current.player.death_music_postfix + ".ogg"))
-	confirm_player.stream = load(ContentManager.get_content_path("gameplay/death/death_retry" + Song.current.player.death_music_postfix + ".ogg"))
+	death_player.stream = origin_character.death_music_intro
+	loop_player.stream = origin_character.death_music_loop
+	confirm_player.stream = origin_character.death_music_retry
 	
 	for child in Song.current.get_children():
 		if child is Camera2D:
 			camera = child
 			break
 	if is_instance_valid(camera):
-		print(camera)
 		var twn = self.create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		twn.tween_property(camera, "global_position", Vector2(character.global_position.x, character.global_position.y - 200), 2)
 	

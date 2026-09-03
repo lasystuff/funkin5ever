@@ -10,9 +10,7 @@ extends HUD
 
 func _ready() -> void:
 	if is_instance_valid(song_text):
-		var song_name:String = Song.current.meta.display_name
-		if song_name.length() < 1:
-			song_name = Song.current.chart._song_id
+		var song_name:String = Song.current.meta.display_name if !Song.current.meta.display_name.is_empty() else Song.current.chart._song_id
 		song_text.text = "- %s [%s] -" % [song_name, Song.current.chart._difficulty.to_upper()]
 	apply_config()
 

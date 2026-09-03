@@ -10,8 +10,6 @@ var controllable:bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	ContentManager.current_content = ""
-	
 	for content in ContentManager.contents:
 		create_content(content)
 	change_item(0, true)
@@ -28,7 +26,7 @@ func change_item(change:int = 0, first:bool = false) -> void:
 	%icon.texture = load(current_item.content.content_path.path_join("menu/contents_menu/icon.png")) if FileAccess.file_exists(current_item.content.content_path.path_join("menu/contents_menu/icon.png")) else load("res://core/menu/contents_menu/icon.png")
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_up") && controllable:
 		change_item(-1)
 	elif Input.is_action_just_pressed("ui_down") && controllable:
@@ -41,7 +39,7 @@ func _process(delta: float) -> void:
 		var has_global:bool = false
 		ContentManager.contents.clear()
 		for item in $contents.get_children():
-			if item.content.enabled && item.content.global:
+			if item.content.enabled && is_instance_valid(item.content.initial_scene):
 				has_global = true
 			ContentManager.contents.push_back(item.content)
 		

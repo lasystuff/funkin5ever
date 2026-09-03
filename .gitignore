@@ -19,3 +19,4 @@ contents/*
 build/*
 !contents/README.md
 notes.txt
+/stuff

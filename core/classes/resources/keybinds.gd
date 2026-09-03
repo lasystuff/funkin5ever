@@ -18,6 +18,8 @@ class_name Keybinds
 @export var debug_kill:int = KEY_R
 @export var debug_switch:int = KEY_F3
 
+@export var extra_actions:Dictionary[String, int] = {}
+
 func reload_binds() -> void:
 	for action in get_property_list():
 		if action.type == TYPE_INT && action.hint_string.is_empty():
@@ -25,3 +27,12 @@ func reload_binds() -> void:
 			event.keycode = self.get(action.name)
 			InputMap.action_erase_events(action.name)
 			InputMap.action_add_event(action.name, event)
+	for action in extra_actions:
+		register_extra_action(action, extra_actions.get(action))
+
+func register_extra_action(name:String, keycode:int) -> void:
+	var event = InputEventKey.new()
+	event.keycode = keycode
+	InputMap.action_add_event(name, event)
+	
+	extra_actions.set(name, keycode)

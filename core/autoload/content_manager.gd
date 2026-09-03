@@ -7,7 +7,6 @@ var contents:Array[ContentMetadata] = []
 var enabled_contents:Array[ContentMetadata]:
 	get():
 		return contents.filter(func(c): return c.enabled)
-var current_content:String = "_core"
 
 var reference_content = ContentMetadata.new()
 
@@ -60,34 +59,20 @@ func _init() -> void:
 			return true
 		return false
 	)
-	
-func get_current_content():
-	var filtered = contents.filter(func(c): return c.id == current_content)
-	if filtered.size() < 1:
-		return null
-	return filtered[0]
 
 func get_content_path(path:String) -> String:
 	# load from current content
-	if get_current_content() != null:
-		var p = get_current_content().content_path.path_join(path)
-		if _folder_or_resource_exists(p):
-			return p
-	# load from global content
 	for content in enabled_contents:
-		if !content.global: continue
 		var p = content.content_path.path_join(path)
 		if _folder_or_resource_exists(p):
 			return p
 	# return core file
 	return CORE_DIRECTORY.path_join(path)
 
-func list_content_paths(path:String, every:bool = false) -> Array:
+func list_content_paths(path:String) -> Array:
 	var result = Array(ResourceLoader.list_directory(CORE_DIRECTORY.path_join(path)))
 	
 	for content in enabled_contents:
-		if !every && content.id != current_content && !content.global:
-			continue
 		var p = content.content_path.path_join(path)
 		for file in Array(ResourceLoader.list_directory(p)):
 			if !result.has(file):

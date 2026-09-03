@@ -11,7 +11,9 @@ class_name Character
 
 @export_category("Death Screen")
 @export var death_character:PackedScene = preload("res://core/gameplay/characters/bf/dead.tscn")
-@export var death_music_postfix:String = ""
+@export var death_music_intro:AudioStream = preload("res://core/gameplay/death/death_intro.ogg")
+@export var death_music_loop:AudioStream = preload("res://core/gameplay/death/death_loop.ogg")
+@export var death_music_retry:AudioStream = preload("res://core/gameplay/death/death_retry.ogg")
 @export_custom(PROPERTY_HINT_LINK, "suffix:BPM") var death_music_bpm:float = 100
 
 @export_category("Extra")

@@ -74,8 +74,7 @@ func _ready() -> void:
 		return
 	# fix when trying to run from editor directly
 	if playlist.size() < 1:
-		var song = self.scene_file_path.split("/")[self.scene_file_path.split("/").size() - 2]
-		playlist.push_back(SongMetadata.get_from_id(song))
+		playlist.push_back(load(self.scene_file_path.replace("song.tscn", "meta.tres")))
 	
 	conductor = Conductor.new()
 	add_child(conductor)

@@ -9,26 +9,18 @@ class_name SongMetadata
 @export_category("Extra")
 @export var extra_data:Dictionary[String, Variant] = {}
 
-var _song_id:String = ""
-
-static func get_from_id(song:String) -> SongMetadata:
-	var tres_path:String = ContentManager.get_content_path("gameplay/songs/" + song + "/meta.tres")
-	var result:SongMetadata
-	if ResourceLoader.exists(tres_path):
-		result = load(tres_path) as SongMetadata
-	else:
-		result = SongMetadata.new()
-	result._song_id = song
-	return result
+var _song_id:String:
+	get:
+		return self.resource_path.get_base_dir().get_file()
 
 func get_scene() -> PackedScene:
-	var scene_path = self.resource_path.replace("meta.tres", "song.tscn")
+	var scene_path = self.resource_path.get_base_dir().path_join("song.tscn")
 	if ResourceLoader.exists(scene_path):
 		return load(scene_path)
 	return null
 
 func get_chart(difficulty:String = "normal") -> Chart:
-	var charts_path = self.resource_path.replace("meta.tres", "charts/")
+	var charts_path = self.resource_path.get_base_dir().path_join("charts/")
 	
 	var result:Chart
 	

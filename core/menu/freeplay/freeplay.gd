@@ -1,6 +1,6 @@
 extends Node2D
 
-const DEFAULT_SONG_LIST:Array[String] = []
+const DEFAULT_SONG_LIST:Array[SongMetadata] = []
 
 static var current_item:int = 0
 static var current_difficulty:int = 0
@@ -9,11 +9,11 @@ var controllable:bool = true
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for song in DEFAULT_SONG_LIST:
-		create_song(song, "_core")
+		create_song(song)
 	
 	for content in ContentManager.enabled_contents:
 		for song in content.freeplay_song_list:
-			create_song(song, content.id)
+			create_song(song)
 	await get_tree().create_timer(0.02).timeout # avoid the camera bug, kill me
 	change_item(0)
 	change_diff(0)
@@ -36,8 +36,6 @@ func _process(delta: float) -> void:
 		change_diff(1)
 	elif Input.is_action_just_pressed("ui_accept") && controllable:
 		controllable = false
-		ContentManager.current_content = %songs.get_child(current_item).content_id
-		
 		GlobalSound.play_sfx(preload("res://core/menu/confirm.ogg"))
 
 		Song.game_mode = Song.GameMode.FREEPLAY
@@ -52,10 +50,9 @@ func _process(delta: float) -> void:
 	for item in %songs.get_children():
 		item.modulate.a = 1.0 if item.get_index() == current_item else 0.5
 
-func create_song(song:String, content:String) -> void:
+func create_song(meta:SongMetadata) -> void:
 	var item = load("res://core/menu/freeplay/song_item.tscn").instantiate()
-	item.content_id = content
-	item.song_id = song
+	item.meta = meta
 	%songs.add_child(item)
 
 var prev_diff:String = "normal"
@@ -70,7 +67,7 @@ func change_diff(change:int = 0) -> void:
 	%difficulty_label.text += %songs.get_child(current_item).meta.difficulties[current_difficulty].to_upper()
 	%difficulty_label.text += " >" if current_difficulty != (%songs.get_child(current_item).meta.difficulties.size() - 1) else "  "
 	
-	var key:String = %songs.get_child(current_item).song_id + ":" + %songs.get_child(current_item).meta.difficulties[current_difficulty]
+	var key:String = %songs.get_child(current_item).meta._song_id + ":" + %songs.get_child(current_item).meta.difficulties[current_difficulty]
 	if Save.scores.has(key):
 		%score_label.text = "PERSONAL BEST: %s" % str(Save.scores.get(key).score)
 	else:

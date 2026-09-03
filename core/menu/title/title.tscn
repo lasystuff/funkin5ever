@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://s2x7vo6jfeeo"]
+
+[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate/animate_symbol_2d.gd" id="1_3mrwi"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate/formats/animate_symbol_library.gd" id="2_pdgbw"]
+[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate/formats/texture_atlas/atlas.gd" id="3_sox04"]
+
+[sub_resource type="Resource" id="Resource_sp7mk"]
+script = ExtResource("3_sox04")
+folder = "res://core/menu/title/press_enter"
+render_mode = "Performance"
+metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
+
+[node name="title" type="Node2D" unique_id=2032571510]
+
+[node name="bg" type="ColorRect" parent="." unique_id=423283617]
+offset_right = 1280.0
+offset_bottom = 728.0
+color = Color(0, 0, 0, 1)
+
+[node name="press_enter" type="Node2D" parent="." unique_id=1198704705]
+position = Vector2(880, 616)
+script = ExtResource("1_3mrwi")
+symbol_libraries = Array[ExtResource("2_pdgbw")]([SubResource("Resource_sp7mk")])
+symbol = &"Press Enter to Begin"
+metadata/_custom_type_script = "uid://c5ju3u657fyae"
