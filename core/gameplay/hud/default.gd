@@ -14,7 +14,9 @@ func _ready() -> void:
 		if song_name.length() < 1:
 			song_name = Song.current.chart._song_id
 		song_text.text = "- %s [%s] -" % [song_name, Song.current.chart._difficulty.to_upper()]
-	
+	apply_config()
+
+func apply_config() -> void:
 	if Config.get_config("down_scroll"):
 		if is_instance_valid(health_bar): health_bar.position.y -= 580
 		if is_instance_valid(player_strumline):
@@ -32,7 +34,7 @@ func _ready() -> void:
 			opponent_strumline.visible = false
 		if is_instance_valid(judgement_display):
 			judgement_display.position.x -= 350
-	
+
 func _ready_post() -> void:
 	_reload_icon()
 

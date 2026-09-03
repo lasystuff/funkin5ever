@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cgndootlpaexq" path="res://core/menu/freeplay/freeplay.gd" id="1_6ifrp"]
 [ext_resource type="Texture2D" uid="uid://dxdyjhe1411j6" path="res://core/menu/bg_gray.png" id="2_mocba"]
+[ext_resource type="FontFile" uid="uid://bqhu0u6tgswpv" path="res://core/fonts/vcr.ttf" id="3_6ifrp"]
 
 [node name="freeplay" type="Node2D" unique_id=1546647075]
 script = ExtResource("1_6ifrp")
@@ -29,7 +30,58 @@ offset_right = 762.0
 offset_bottom = 728.0
 theme_override_constants/separation = 16
 
+[node name="canvas_layer" type="CanvasLayer" parent="." unique_id=865789716]
+
+[node name="score_label" type="Label" parent="canvas_layer" unique_id=1131478549]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -305.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 36.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("3_6ifrp")
+theme_override_font_sizes/font_size = 32
+text = "PERSONAL BEST: 1234"
+horizontal_alignment = 2
+
+[node name="bg" type="ColorRect" parent="canvas_layer/score_label" unique_id=982267355]
+self_modulate = Color(1, 1, 1, 0.6)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -7.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="difficulty_label" type="Label" parent="canvas_layer/score_label/bg" unique_id=824574453]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -152.0
+offset_top = -26.0
+offset_right = 152.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_6ifrp")
+theme_override_font_sizes/font_size = 24
+text = "< NORMAL >"
+horizontal_alignment = 1
+
 [node name="camera" type="Camera2D" parent="." unique_id=1496341097]
 unique_name_in_owner = true
-position = Vector2(640, 360)
+position = Vector2(640, 0)
 position_smoothing_enabled = true

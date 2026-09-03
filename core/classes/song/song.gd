@@ -11,6 +11,7 @@ enum GameMode
 
 static var current:Song
 static var playlist:Array[SongMetadata] = []
+static var difficulty:String = "normal"
 static var story_level:String
 static var story_stats:GameStats
 static var game_mode:GameMode = GameMode.FREEPLAY
@@ -54,10 +55,10 @@ var player_vocal:SongStreamPlayer
 
 signal _before_ready_post # I'M GOING INSANE
 
-static func start_playlist(_playlist:Array[String]) -> void:
+static func start_playlist(_playlist:Array[SongMetadata]) -> void:
 	playlist = []
 	for song in _playlist:
-		playlist.push_back(SongMetadata.get_from_id(song))
+		playlist.push_back(song)
 	if playlist.size() > 0:
 		Transition.switch_scene(playlist[0].get_scene())
 	else:
@@ -80,7 +81,7 @@ func _ready() -> void:
 	add_child(conductor)
 	conductor.beat_hit.connect(_on_beat_hit)
 	
-	chart = meta.get_chart()
+	chart = meta.get_chart(difficulty)
 	conductor.set_bpm_changes(chart.bpm_changes)
 	
 	stats = GameStats.new()
@@ -249,18 +250,30 @@ func _song_exit() -> void:
 		GameMode.STORY:
 			if story_stats == null:
 				story_stats = GameStats.new()
+			story_stats.score += stats.score
 			if playlist.size() > 1:
 				playlist.pop_front()
-				story_stats.score += stats.score
 				Transition.switch_scene(playlist[0].get_scene())
 			else:
-				Save.scores.set(story_level + ":" + chart._difficulty, story_stats)
+				var key:String = story_level + ":" + chart._difficulty
+				if Save.scores.has(key):
+					var prev_stats:GameStats = Save.scores.get(key)
+					if story_stats.score > prev_stats.score:
+						Save.scores.set(key, story_stats)
+				else:
+					Save.scores.set(key, story_stats)
 				Save.save()
 				story_stats = null
 				Transition.switch_scene(return_scene)
 		_: #GameMode.FREEPLAY
 			story_stats = null
-			Save.scores.set(meta._song_id + ":" + chart._difficulty, stats)
+			var key:String = meta._song_id + ":" + chart._difficulty
+			if Save.scores.has(key):
+				var prev_stats:GameStats = Save.scores.get(key)
+				if stats.score > prev_stats.score:
+					Save.scores.set(key, stats)
+			else:
+				Save.scores.set(key, stats)
 			Save.save()
 			Transition.switch_scene(return_scene)
 
