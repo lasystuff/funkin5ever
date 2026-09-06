@@ -59,6 +59,8 @@ func _init() -> void:
 			return true
 		return false
 	)
+	
+	reload_window.call_deferred()
 
 func get_content_path(path:String) -> String:
 	# load from current content
@@ -87,3 +89,12 @@ func create_list_save() -> Array[Dictionary]:
 	for content in contents:
 		result.push_back({"id": content.id, "enabled": content.enabled})
 	return result
+
+func reload_window() -> void:
+	#await get_tree().create_timer(2).timeout
+	for content in enabled_contents:
+		if !content.window_title.is_empty():
+			DisplayServer.window_set_title(content.window_title)
+			if is_instance_valid(content.icon):
+				DisplayServer.set_icon(content.icon.get_image())
+			break

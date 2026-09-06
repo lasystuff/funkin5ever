@@ -18,6 +18,7 @@ var judge_tween:Tween
 func _ready() -> void:
 	judgement.visible = false
 	combo.visible = false
+	combo.text = ""
 	
 	_initial_judge_scale = Vector2(judgement.scale)
 

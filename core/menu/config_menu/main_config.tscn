@@ -15,7 +15,6 @@ metadata/_custom_type_script = "uid://dh4lfopl3fg55"
 scroll_scale = Vector2(0, 0)
 
 [node name="bg" type="TextureRect" parent="parallax_2d" unique_id=63857373]
-unique_name_in_owner = true
 modulate = Color(1, 0.39999998, 0.64999986, 1)
 anchors_preset = 8
 anchor_left = 0.5
@@ -29,7 +28,6 @@ grow_vertical = 2
 texture = ExtResource("1_r3j6x")
 
 [node name="items" type="VBoxContainer" parent="." unique_id=134067457]
-unique_name_in_owner = true
 offset_left = 64.0
 offset_right = 1280.0
 offset_bottom = 728.0
@@ -41,6 +39,5 @@ submenu_scene = ExtResource("4_twctw")
 display_name = "GAMEPLAY"
 
 [node name="camera" type="Camera2D" parent="." unique_id=782847905]
-unique_name_in_owner = true
 position = Vector2(640, 360)
 position_smoothing_enabled = true

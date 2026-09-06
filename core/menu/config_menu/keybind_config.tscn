@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://conu13ofs52s2"]
+
+[ext_resource type="Script" uid="uid://dh4lfopl3fg55" path="res://core/menu/config_menu/config_submenu.gd" id="1_cg68c"]
+[ext_resource type="Texture2D" uid="uid://dxdyjhe1411j6" path="res://core/menu/bg_gray.png" id="2_4yvut"]
+[ext_resource type="PackedScene" uid="uid://c7jbjnrpwjhm6" path="res://core/menu/config_menu/item/bind_item.tscn" id="3_5c6oy"]
+
+[node name="keybind_config" type="Node2D" unique_id=221472995 node_paths=PackedStringArray("item_container", "camera")]
+script = ExtResource("1_cg68c")
+back_scene_path = "res://core/menu/config_menu/gameplay_config.tscn"
+item_container = NodePath("items")
+camera = NodePath("camera")
+metadata/_custom_type_script = "uid://dh4lfopl3fg55"
+
+[node name="parallax_2d" type="Parallax2D" parent="." unique_id=827888716]
+scroll_scale = Vector2(0, 0)
+
+[node name="bg" type="TextureRect" parent="parallax_2d" unique_id=1993290863]
+modulate = Color(0.6627451, 1, 0.4862745, 1)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 1286.0
+offset_bottom = 730.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_4yvut")
+
+[node name="items" type="VBoxContainer" parent="." unique_id=1485729269]
+offset_left = 64.0
+offset_right = 1280.0
+offset_bottom = 728.0
+theme_override_constants/separation = 16
+
+[node name="ui_accept" parent="items" unique_id=410455542 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "UI ACCEPT"
+save_id = "ui_accept"
+
+[node name="ui_cancel" parent="items" unique_id=489018530 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "UI CANCEL"
+save_id = "ui_cancel"
+
+[node name="ui_left" parent="items" unique_id=482955106 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "UI LEFT"
+save_id = "ui_left"
+
+[node name="ui_down" parent="items" unique_id=1333019780 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "UI DOWN"
+save_id = "ui_down"
+
+[node name="ui_up" parent="items" unique_id=1880113291 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "UI UP"
+save_id = "ui_up"
+
+[node name="ui_right" parent="items" unique_id=391348152 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "UI RIGHT"
+save_id = "ui_right"
+
+[node name="ui_mod_manager" parent="items" unique_id=2032838115 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "MOD MANAGER"
+save_id = "ui_mod_manager"
+
+[node name="note_left" parent="items" unique_id=1126290943 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "NOTE LEFT"
+save_id = "note_left"
+
+[node name="note_down" parent="items" unique_id=1608456992 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "NOTE DOWN"
+save_id = "note_down"
+
+[node name="note_up" parent="items" unique_id=1072834725 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "NOTE UP"
+save_id = "note_up"
+
+[node name="note_right" parent="items" unique_id=1406356285 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "NOTE RIGHT"
+save_id = "note_right"
+
+[node name="debug_kill" parent="items" unique_id=1890043262 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "INSTAKILL"
+save_id = "debug_kill"
+
+[node name="debug_switch" parent="items" unique_id=493233758 instance=ExtResource("3_5c6oy")]
+layout_mode = 2
+display_name = "DEBUG DISPLAY"
+save_id = "debug_switch"
+
+[node name="camera" type="Camera2D" parent="." unique_id=1640034767]
+position = Vector2(640, 360)
+position_smoothing_enabled = true

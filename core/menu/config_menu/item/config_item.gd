@@ -5,6 +5,7 @@ class_name ConfigItem
 @export var display_name:String
 @export var label:Label
 @export var save_id:String = ""
+@export_multiline var hint:String = ""
 
 var selected:bool = false
 

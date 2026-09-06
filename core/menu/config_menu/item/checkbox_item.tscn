@@ -10,6 +10,7 @@ offset_bottom = 80.0
 theme_override_constants/separation = 24
 script = ExtResource("1_rck6g")
 label = NodePath("label")
+hint = null
 
 [node name="label" type="Label" parent="." unique_id=1979817662]
 layout_mode = 2

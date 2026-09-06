@@ -23,7 +23,7 @@ func change_item(change:int = 0, first:bool = false) -> void:
 	var current_item = %contents.get_child(current_item)
 	%title_label.text = current_item.content.name
 	%description_label.text = current_item.content.description if current_item.content.description.length() > 0 else "no description provided"
-	%icon.texture = load(current_item.content.content_path.path_join("menu/contents_menu/icon.png")) if FileAccess.file_exists(current_item.content.content_path.path_join("menu/contents_menu/icon.png")) else load("res://core/menu/contents_menu/icon.png")
+	%icon.texture = current_item.content.icon
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -43,11 +43,12 @@ func _process(_delta: float) -> void:
 				has_global = true
 			ContentManager.contents.push_back(item.content)
 		
+		ContentManager.reload_window()
+		CustomAutoload.reload()
 		if has_global:
 			Transition.switch_scene(preload("res://core/startup.tscn"))
 		else:
-			CustomAutoload.reload()
-			Transition.switch_scene(preload("res://core/menu/freeplay/freeplay.tscn"))
+			Transition.switch_scene(preload("res://core/menu/main_menu/main_menu.tscn"))
 	
 	for item in %contents.get_children():
 		item.modulate.a = 1 if item.get_index() == current_item else 0.8

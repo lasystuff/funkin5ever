@@ -4,6 +4,9 @@ class_name ContentMetadata
 @export var name:String = ""
 @export_multiline var description:String = ""
 @export var initial_scene:PackedScene
+@export_category("Window")
+@export var window_title:String = ""
+@export var icon:Texture2D
 
 @export_category("Gameplay")
 @export var freeplay_song_list:Array[SongMetadata] = []

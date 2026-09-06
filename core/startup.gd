@@ -1,7 +1,7 @@
 extends Node2D
 class_name Startup
 
-static var initial_scene:PackedScene = preload("res://core/menu/freeplay/freeplay.tscn")
+static var initial_scene:PackedScene = preload("res://core/menu/title/title.tscn")
 
 func _ready() -> void:
 	var scene = initial_scene

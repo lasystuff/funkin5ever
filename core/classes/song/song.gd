@@ -76,6 +76,9 @@ func _ready() -> void:
 	if playlist.size() < 1:
 		playlist.push_back(load(self.scene_file_path.replace("song.tscn", "meta.tres")))
 	
+	if GlobalSound.music_player.playing:
+		GlobalSound.music_player.stop()
+	
 	conductor = Conductor.new()
 	add_child(conductor)
 	conductor.beat_hit.connect(_on_beat_hit)
@@ -148,6 +151,9 @@ func _start_countdown() -> void:
 	for script in loaded_scripts:
 		script._ready_post()
 	hud._ready_post()
+	
+	# Discord thing
+	Discord.song()
 	
 	if skip_countdown:
 		_start_song()
@@ -232,6 +238,9 @@ func _on_exit() -> void:
 	for script in loaded_scripts:
 		script.queue_free()
 		loaded_scripts.erase(script)
+	
+	Discord.menu()
+	GlobalSound.play_music(load("res://core/menu/music.ogg"))
 	
 func _song_finished() -> void:
 	if animation_player.has_animation("end_cutscene"):

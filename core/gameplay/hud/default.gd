@@ -19,12 +19,14 @@ func apply_config() -> void:
 		if is_instance_valid(health_bar): health_bar.position.y -= 580
 		if is_instance_valid(player_strumline):
 			player_strumline.down_scroll = true
-			player_strumline.position.y += 530
+			player_strumline.position.y += 510
 		if is_instance_valid(opponent_strumline):
 			opponent_strumline.down_scroll = true
-			opponent_strumline.position.y += 530
+			opponent_strumline.position.y += 510
 		if is_instance_valid(judgement_display):
 			judgement_display.position.y += 510
+		if is_instance_valid(score_text):
+			score_text.position.y += 13
 	if Config.get_config("middle_scroll"):
 		if is_instance_valid(player_strumline):
 			player_strumline.position.x = 416

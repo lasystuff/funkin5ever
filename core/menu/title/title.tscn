@@ -1,25 +1,68 @@
 [gd_scene format=3 uid="uid://s2x7vo6jfeeo"]
 
-[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate/animate_symbol_2d.gd" id="1_3mrwi"]
-[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate/formats/animate_symbol_library.gd" id="2_pdgbw"]
-[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate/formats/texture_atlas/atlas.gd" id="3_sox04"]
-
-[sub_resource type="Resource" id="Resource_sp7mk"]
-script = ExtResource("3_sox04")
-folder = "res://core/menu/title/press_enter"
-render_mode = "Performance"
-metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
+[ext_resource type="SpriteFrames" uid="uid://jalacvhlo7c3" path="res://core/menu/title/gf.xml" id="1_pdgbw"]
+[ext_resource type="Script" uid="uid://bd1jkjeyhgf1r" path="res://core/menu/title/title.gd" id="1_sox04"]
+[ext_resource type="Script" uid="uid://s08545ch4u74" path="res://core/classes/extensions/animated_sprite_ex.gd" id="2_3mrwi"]
+[ext_resource type="SpriteFrames" uid="uid://dwqlrc7ckqatm" path="res://core/menu/title/press_enter.res" id="4_pdgbw"]
+[ext_resource type="SpriteFrames" uid="uid://qlpbbihclrob" path="res://core/menu/title/logo.res" id="4_sox04"]
+[ext_resource type="FontFile" uid="uid://c7euvp5baixmv" path="res://core/fonts/alphabet.png" id="6_wms4c"]
 
 [node name="title" type="Node2D" unique_id=2032571510]
+script = ExtResource("1_sox04")
 
 [node name="bg" type="ColorRect" parent="." unique_id=423283617]
 offset_right = 1280.0
 offset_bottom = 728.0
 color = Color(0, 0, 0, 1)
 
-[node name="press_enter" type="Node2D" parent="." unique_id=1198704705]
-position = Vector2(880, 616)
-script = ExtResource("1_3mrwi")
-symbol_libraries = Array[ExtResource("2_pdgbw")]([SubResource("Resource_sp7mk")])
-symbol = &"Press Enter to Begin"
-metadata/_custom_type_script = "uid://c5ju3u657fyae"
+[node name="main" type="Node2D" parent="." unique_id=113061970]
+visible = false
+
+[node name="gf" type="AnimatedSprite2D" parent="main" unique_id=31883970]
+unique_name_in_owner = true
+position = Vector2(912, 400)
+scale = Vector2(0.9, 0.9)
+sprite_frames = ExtResource("1_pdgbw")
+animation = &"gfDance"
+script = ExtResource("2_3mrwi")
+metadata/_custom_type_script = "uid://s08545ch4u74"
+
+[node name="logo" type="AnimatedSprite2D" parent="main" unique_id=1354130342]
+unique_name_in_owner = true
+position = Vector2(376, 264)
+scale = Vector2(0.9, 0.9)
+sprite_frames = ExtResource("4_sox04")
+animation = &"logo bumpin"
+script = ExtResource("2_3mrwi")
+metadata/_custom_type_script = "uid://s08545ch4u74"
+
+[node name="press_enter" type="AnimatedSprite2D" parent="main" unique_id=1804297776]
+unique_name_in_owner = true
+position = Vector2(648, 616)
+sprite_frames = ExtResource("4_pdgbw")
+animation = &"ENTER PRESSED"
+script = ExtResource("2_3mrwi")
+metadata/_custom_type_script = "uid://s08545ch4u74"
+
+[node name="intro" type="Node2D" parent="." unique_id=1728032169]
+
+[node name="intro_label" type="RichTextLabel" parent="intro" unique_id=441489338]
+unique_name_in_owner = true
+offset_right = 1280.0
+offset_bottom = 728.0
+theme_override_fonts/normal_font = ExtResource("6_wms4c")
+theme_override_font_sizes/normal_font_size = 70
+bbcode_enabled = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="canvas_layer" type="CanvasLayer" parent="." unique_id=705256823]
+
+[node name="flash" type="ColorRect" parent="canvas_layer" unique_id=705820417]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -34,6 +34,10 @@ func _process(delta: float) -> void:
 		change_diff(-1)
 	if Input.is_action_just_pressed("ui_right") && controllable:
 		change_diff(1)
+	if Input.is_action_just_pressed("ui_cancel") && controllable:
+		controllable = false
+		GlobalSound.play_sfx(preload("res://core/menu/cancel.ogg"))
+		Transition.switch_scene(load("res://core/menu/main_menu/main_menu.tscn"))
 	elif Input.is_action_just_pressed("ui_accept") && controllable:
 		controllable = false
 		GlobalSound.play_sfx(preload("res://core/menu/confirm.ogg"))
