@@ -31,8 +31,11 @@ func reload_binds() -> void:
 		register_extra_action(action, extra_actions.get(action))
 
 func register_extra_action(name:String, keycode:int) -> void:
+	if InputMap.has_action(name): return
+	
 	var event = InputEventKey.new()
 	event.keycode = keycode
+	InputMap.add_action(name)
 	InputMap.action_add_event(name, event)
 	
 	extra_actions.set(name, keycode)

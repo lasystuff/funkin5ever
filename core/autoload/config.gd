@@ -2,6 +2,11 @@ extends Node
 
 var data:ConfigData
 
+# some shortcut
+var keybinds:Keybinds:
+	get():
+		return data.keybinds
+
 func _init() -> void:
 	load_config()
 

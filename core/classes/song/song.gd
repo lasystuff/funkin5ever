@@ -18,7 +18,6 @@ static var game_mode:GameMode = GameMode.FREEPLAY
 static var return_scene:PackedScene
 
 @export var animation_player:AnimationPlayer
-@export var scripts:Array[GDScript] = []
 
 @export var skip_countdown:bool = false
 @export var camera_bop_interval:int = 4
@@ -42,7 +41,7 @@ var meta:SongMetadata:
 	get():
 		return playlist[0]
 
-var loaded_scripts:Array[SongScript] = []
+var scripts:Array[SongScript] = []
 
 var hud_layer:CanvasLayer
 var hud:HUD
@@ -99,10 +98,19 @@ func _ready() -> void:
 			
 	)
 	
-	for script_file in scripts:
-		var instance = script_file.new() as SongScript
-		loaded_scripts.push_back(instance)
-		instance._ready()
+	# local scripts
+	if DirAccess.dir_exists_absolute(meta.resource_path.replace("meta.tres", "scripts/")):
+		for script_file in DirAccess.get_files_at(meta.resource_path.replace("meta.tres", "scripts/")):
+			if script_file.ends_with(".gd"):
+				var instance = load(meta.resource_path.replace("meta.tres", "scripts/").path_join(script_file)).new() as SongScript
+				scripts.push_back(instance)
+				instance._ready()
+	# global scripts
+	for script_file in ContentManager.list_content_paths("gameplay/scripts/"):
+		if script_file.ends_with(".gd"):
+			var instance = load(ContentManager.get_content_path("gameplay/scripts/" + script_file)).new() as SongScript
+			scripts.push_back(instance)
+			instance._ready()
 	
 	hud_layer = CanvasLayer.new()
 	hud = hud_scene.instantiate() as HUD
@@ -135,7 +143,7 @@ func _ready() -> void:
 	countdown.skin = countdown_skin
 	
 	countdown.countdown_step.connect(func(step:int):
-		for script in loaded_scripts:
+		for script in scripts:
 			script._on_countdown_beat(step)
 		hud._on_countdown_beat(step)
 	)
@@ -148,7 +156,7 @@ func _ready() -> void:
 		_start_countdown()
 	
 func _start_countdown() -> void:
-	for script in loaded_scripts:
+	for script in scripts:
 		script._ready_post()
 	hud._ready_post()
 	
@@ -168,14 +176,14 @@ func _start_countdown() -> void:
 func _start_song() -> void:
 	animation_player.play("song")
 		
-	for script in loaded_scripts:
+	for script in scripts:
 		script._on_song_start()
 	hud._on_song_start()
 	
 	song_started = true
 
 func _default_note_miss(note:Note, _type:Strumline.MissType) -> void:
-	for script in loaded_scripts:
+	for script in scripts:
 		script._on_note_miss(note, note.strumline)
 	hud._on_note_miss(note, note.strumline)
 
@@ -183,7 +191,7 @@ func _player_note_hit(note:Note, is_sustain_part:bool) -> void:
 	if is_instance_valid(player_vocal): player_vocal.volume_linear = 1
 	if !is_sustain_part:
 		var judge = stats.score_note(note)
-		for script in loaded_scripts:
+		for script in scripts:
 			script._on_note_hit(note, note.strumline, judge)
 		hud._on_note_hit(note, note.strumline, judge)
 	
@@ -194,7 +202,7 @@ func _player_note_miss(_note:Note, type:Strumline.MissType) -> void:
 	
 func _opponent_note_hit(note:Note, is_sustain_part:bool) -> void:
 	if !is_sustain_part:
-		for script in loaded_scripts:
+		for script in scripts:
 			script._on_note_hit(note, note.strumline)
 		hud._on_note_hit(note, note.strumline)
 	
@@ -208,7 +216,7 @@ func _process(delta: float) -> void:
 	else:
 		conductor.song_position += delta
 	
-	for script in loaded_scripts:
+	for script in scripts:
 		script._process(delta)
 	
 	if Input.is_action_just_pressed("ui_accept"):
@@ -235,9 +243,9 @@ func _on_beat_hit(beat:int) -> void:
 		zoom_tween.tween_property(hud, "scale", Vector2.ONE, conductor.get_crotchet() * 4)
 
 func _on_exit() -> void:
-	for script in loaded_scripts:
+	for script in scripts:
 		script.queue_free()
-		loaded_scripts.erase(script)
+		scripts.erase(script)
 	
 	Discord.menu()
 	GlobalSound.play_music(load("res://core/menu/music.ogg"))
@@ -249,7 +257,7 @@ func _song_finished() -> void:
 		_song_exit()
 
 func _song_exit() -> void:
-	for script in loaded_scripts:
+	for script in scripts:
 		script._on_song_finish()
 	hud._on_song_finish()
 	

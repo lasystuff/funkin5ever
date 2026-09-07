@@ -5,7 +5,7 @@ var controllable:bool = true
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	%info_label.text = "funkin5ever v" + ProjectSettings.get("application/config/version")
-	%info_label.text += "\nPress TAB to open Content Manager"
+	%info_label.text += "\nPress %s to open Content Manager" % OS.get_keycode_string(Config.data.keybinds.ui_mod_manager).to_upper()
 	
 	if !GlobalSound.music_player.playing:
 		GlobalSound.play_music(load("res://core/menu/music.ogg"))
@@ -38,7 +38,7 @@ func _process(_delta: float) -> void:
 		for item in %container.get_children():
 			if item.get_index() != current_item:
 				tween.tween_property(item, "modulate:a", 0, 0.2)
-		await tween.finished
+		await get_tree().create_timer(0.5).timeout
 		match %container.get_child(current_item).name:
 			"story":
 				pass

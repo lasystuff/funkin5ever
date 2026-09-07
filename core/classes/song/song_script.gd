@@ -1,6 +1,10 @@
 extends Node2D
 class_name SongScript
 
+var song:Song:
+	get():
+		return Song.current
+
 func _init() -> void:
 	if is_instance_valid(Conductor.instance):
 		Conductor.instance.step_hit.connect(_on_step_hit)
