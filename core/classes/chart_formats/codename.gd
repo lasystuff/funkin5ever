@@ -26,10 +26,13 @@ func get_chart(chart_path:String, difficulty:String = "normal") -> Chart:
 			note_data.column = base_note.id
 			note_data.length = base_note.sLen / 1000
 			note_data.type = base.noteTypes[int(base_note.type)]
-			if base.strumLines.find(strumline) == 0: # opponent
-				note_data.player = NoteData.PlayerType.OPPONENT
-			else: # player
-				note_data.player = NoteData.PlayerType.PLAYER
+			match int(strumline.type):
+				0:
+					note_data.player = NoteData.PlayerType.OPPONENT
+				1:
+					note_data.player = NoteData.PlayerType.PLAYER
+				_:
+					note_data.player = NoteData.PlayerType.EXTRA
 			chart.notes.push_back(note_data)
 	
 	var base_events = BasicChart.get_raw_events(chart_path)
