@@ -25,7 +25,7 @@ The `Character` script registers the node with its selected strumline after the 
 
 The project includes the Godot Sparrow importer. Keep a Sparrow atlas PNG and its XML in the same character folder, let Godot import the XML, then assign the resulting `SpriteFrames` resource to the `sprite` node. The existing BF scene uses `AnimatedSprite2DEx`, a small extension that makes its `playing` property work cleanly in AnimationPlayer tracks.
 
-Before creating engine animations, inspect the imported `SpriteFrames` and write down the exact source names. They may be names such as `NEON BF idle`, `NEON BF NOTE LEFT`, and `NEON BF NOTE LEFT miss`. Case, spaces, and punctuation must match the importer output.
+Before creating engine animations, inspect the imported `SpriteFrames` and write down the exact source names. They may be names such as `BF idle`, `BF NOTE LEFT`, and `BF NOTE LEFT miss`. Case, spaces, and punctuation must match the importer output.
 
 Set the sprite’s neutral animation and its visual position. A negative Y position is common because the scene root is normally treated as the character’s ground point. Do the placement in the song scene after the character scene itself looks right at `(0, 0)`.
 
@@ -47,7 +47,7 @@ For each engine animation, add value tracks targeting the sprite:
 
 ```text
 sprite:playing   = true
-sprite:animation = "NEON BF NOTE LEFT"
+sprite:animation = "BF NOTE LEFT"
 sprite:offset    = (-18, 4)
 ```
 
@@ -80,10 +80,10 @@ Then assign **Death Music Intro**, **Death Music Loop**, **Death Music Retry**, 
 Instance `character.tscn` in `song.tscn`, position it on the stage, and set its Character Type in the instance if you need a player/opponent variant. Character order matters to the default HUD: it takes the first character associated with each strumline as its displayed health icon; the death screen takes the first player character.
 
 ```text
-neon-rush (Song)
-  neon_bf (instance of neon_bf/character.tscn)
+song_name (Song)
+  bf (instance of bf/character.tscn)
     character_type = Player
-  neon_opponent (instance of neon_opponent/character.tscn)
+  opponent (instance of opponent/character.tscn)
     character_type = Opponent
 ```
 

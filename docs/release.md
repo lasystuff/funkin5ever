@@ -8,7 +8,7 @@ Start with the project’s **Content Export** preset. The archive must preserve 
 GameFolder/
   funkin5ever.exe
   contents/
-    neon_nights.pck
+    content_name.pck
 ```
 
 Use one archive per package. Test it in an empty copied game folder containing no editor imports, old packs, or development folder.
