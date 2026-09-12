@@ -20,7 +20,7 @@ var score:int = 0
 var health:float = 1:
 	set(value):
 		if value > 2:
-			health = 2
+			value = 2
 		elif value < 0:
 			value = 0
 		health = value

@@ -17,8 +17,12 @@ enum ShaderOption
 @export var middle_scroll:bool = false
 @export var keybinds:Keybinds = Keybinds.new()
 
-@export var antialiasing:bool = true
+@export var antialiasing:bool = true:
+	set(value):
+		antialiasing = value
+		Global.root.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR if antialiasing else Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 @export var shaders:ShaderOption = ShaderOption.ALL
+var _shaders_config:String = "all"
 
 @export var content_list:Array[Dictionary] = []
 
@@ -32,7 +36,21 @@ func migrate() -> void:
 	self.version = DEFAULT_CONFIG_VERSION
 	
 func _on_load() -> void:
+	match shaders:
+		ShaderOption.MINIMAL:
+			_shaders_config = "MINIMAL"
+		ShaderOption.DISABLED:
+			_shaders_config = "DISABLED"
+		_:
+			_shaders_config = "ALL"
 	keybinds.reload_binds()
 
 func _on_save() -> void:
 	content_list = ContentManager.create_list_save()
+	match _shaders_config:
+		"MINIMAL":
+			shaders = ShaderOption.MINIMAL
+		"DISABLED":
+			shaders = ShaderOption.DISABLED
+		_:
+			shaders = ShaderOption.ALL

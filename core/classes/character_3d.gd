@@ -1,5 +1,5 @@
-extends Node2D
-class_name Character
+extends Node3D
+class_name Character3D
 
 @export var character_type:NoteData.PlayerType = NoteData.PlayerType.PLAYER
 @export var dance_animations:Array[String] = ["idle"]

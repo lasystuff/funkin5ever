@@ -9,9 +9,6 @@ class_name ConfigItem
 
 var selected:bool = false
 
-func save_value():
-	pass
-
 func _process(delta: float) -> void:
 	if is_instance_valid(label) && !display_name.is_empty() && label.text != display_name:
 		label.text = display_name

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dt1g7d2ypt1rb"]
 
-[ext_resource type="Script" uid="uid://dxmc5qdup0exi" path="res://core/classes/character.gd" id="1_rr25j"]
+[ext_resource type="Script" uid="uid://oknbil87oet5" path="res://core/classes/character_2d.gd" id="1_k2w8d"]
 [ext_resource type="SpriteFrames" uid="uid://brd5vfb5fms02" path="res://core/gameplay/characters/bf/BOYFRIEND.xml" id="2_k2w8d"]
 [ext_resource type="Script" uid="uid://s08545ch4u74" path="res://core/classes/extensions/animated_sprite_ex.gd" id="3_gartg"]
 
@@ -253,9 +253,10 @@ _data = {
 &"sing_up": SubResource("Animation_cp0bb")
 }
 
-[node name="bf" type="Node2D" unique_id=353933422 node_paths=PackedStringArray("animation_player")]
-script = ExtResource("1_rr25j")
+[node name="bf" type="Node2D" unique_id=357572308 node_paths=PackedStringArray("animation_player")]
+script = ExtResource("1_k2w8d")
 animation_player = NodePath("animation_player")
+metadata/_custom_type_script = "uid://oknbil87oet5"
 
 [node name="sprite" type="AnimatedSprite2D" parent="." unique_id=1292250224]
 position = Vector2(0, -160)

@@ -4,7 +4,7 @@ extends Node2D
 @onready var loop_player:AudioStreamPlayer = %loop
 @onready var confirm_player:AudioStreamPlayer = %confirm
 
-var character:Character
+var character:Character2D
 var conductor:Conductor
 var camera:Camera2D
 
@@ -15,7 +15,7 @@ func _ready() -> void:
 		print("[Death Screen] Current player is invalid! Can't start death screen.")
 		return
 	
-	var origin_character:Character = Song.current.hud.player_strumline.characters[0]
+	var origin_character = Song.current.hud.player_strumline.characters[0]
 	character = origin_character.death_character.instantiate()
 	add_child(character)
 	character.global_position = origin_character.global_position

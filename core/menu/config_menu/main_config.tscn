@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://tu1sfp6oa81n" path="res://core/menu/config_menu/main_config.gd" id="1_wgky6"]
 [ext_resource type="PackedScene" uid="uid://b72xirch3k8kt" path="res://core/menu/config_menu/item/submenu_item.tscn" id="3_wgky6"]
 [ext_resource type="PackedScene" uid="uid://ctgfeils4etbe" path="res://core/menu/config_menu/gameplay_config.tscn" id="4_twctw"]
+[ext_resource type="PackedScene" uid="uid://dfxmfu610le12" path="res://core/menu/config_menu/visuals_config.tscn" id="5_twctw"]
 
 [node name="main_config" type="Node2D" unique_id=1372328501 node_paths=PackedStringArray("item_container", "camera")]
 script = ExtResource("1_wgky6")
@@ -37,6 +38,11 @@ theme_override_constants/separation = 16
 layout_mode = 2
 submenu_scene = ExtResource("4_twctw")
 display_name = "GAMEPLAY"
+
+[node name="visuals" parent="items" unique_id=1042650902 instance=ExtResource("3_wgky6")]
+layout_mode = 2
+submenu_scene = ExtResource("5_twctw")
+display_name = "VISUALS"
 
 [node name="camera" type="Camera2D" parent="." unique_id=782847905]
 position = Vector2(640, 360)

@@ -16,7 +16,7 @@ enum MissType
 @export var botplay:bool = true
 @export var play_note_splashes:bool = false
 
-@export var characters:Array[Character] = []
+@export var characters:Array[Node] = []
 
 @onready var strums:Array[Node2D] = [%left, %down, %up, %right]
 
