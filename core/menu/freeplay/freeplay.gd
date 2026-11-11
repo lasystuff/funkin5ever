@@ -1,4 +1,5 @@
 extends Node2D
+class_name Freeplay
 
 const DEFAULT_SONG_LIST:Array[SongMetadata] = []
 
@@ -7,6 +8,8 @@ static var current_difficulty:int = 0
 var controllable:bool = true
 
 var bg_tween:Tween
+
+static var return_scene:String = "res://core/menu/main_menu/main_menu.tscn"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -42,7 +45,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_cancel") && controllable:
 		controllable = false
 		GlobalSound.play_sfx(preload("res://core/menu/cancel.ogg"))
-		Transition.switch_scene(load("res://core/menu/main_menu/main_menu.tscn"))
+		Transition.switch_scene(load(return_scene))
 	elif Input.is_action_just_pressed("ui_accept") && controllable:
 		controllable = false
 		GlobalSound.play_sfx(preload("res://core/menu/confirm.ogg"))

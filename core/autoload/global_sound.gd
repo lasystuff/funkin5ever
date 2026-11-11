@@ -3,6 +3,9 @@ extends Node
 @onready var sfx_player:AudioStreamPlayer = %sfx_player
 @onready var music_player:AudioStreamPlayer = %music_player
 
+func _ready() -> void:
+	%music_player.finished.connect(%music_player.play)
+
 func play_sfx(stream:AudioStream) -> void:
 	%sfx_player.stop()
 	%sfx_player.stream = stream

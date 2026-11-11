@@ -9,4 +9,4 @@ func _ready() -> void:
 		if is_instance_valid(content.initial_scene):
 			scene = content.initial_scene
 			break
-	Transition.switch_scene(scene, null)
+	Transition.switch_scene(scene, "")

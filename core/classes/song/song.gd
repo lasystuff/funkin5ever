@@ -77,6 +77,11 @@ func _init() -> void:
 	if Engine.is_editor_hint(): return
 	current = self
 
+func call_on_scripts(f:String, args:Array[Variant]) -> void:
+	for script in scripts:
+		if f in script:
+			script.callv(f, args)
+
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	# fix when trying to run from editor directly
@@ -173,6 +178,11 @@ func _ready() -> void:
 	else:
 		_start_countdown()
 	
+	for script in scripts:
+		script._ready_post()
+	if is_instance_valid(hud):
+		hud._ready_post()
+	
 func load_notes() -> void:
 	for note in chart.notes:
 		match note.player:
@@ -188,10 +198,6 @@ func load_notes() -> void:
 
 func _start_countdown() -> void:
 	if in_chart_editor: return
-	for script in scripts:
-		script._ready_post()
-	if is_instance_valid(hud):
-		hud._ready_post()
 	
 	in_cutscene = false
 	
@@ -344,14 +350,14 @@ func _song_exit() -> void:
 			
 			Transition.switch_scene(return_scene)
 	
+	played_intro_cutscene = false
+	played_end_cutscene = false
+	
 	Discord.menu()
-	GlobalSound.play_music(load("res://core/menu/music.ogg"))
+	GlobalSound.play_music(load(MainMenu.menu_song))
 
 func import_camera_events() -> void:
 	if !Engine.is_editor_hint():
-		return
-	if !self.extra_data.has("player_camera_position") or !self.extra_data.has("opponent_camera_position"):
-		print("add 'player_camera_position' and 'opponent_camera_position' to extra data, to convert camera events properly!")
 		return
 	
 	var new_meta:SongMetadata = load(self.scene_file_path.replace("song.tscn", "meta.tres"))
@@ -359,11 +365,11 @@ func import_camera_events() -> void:
 		print("AnimationPlayer is not assigned!")
 		return
 		
-	var camera:Camera2D
+	var camera:SongCamera2D
 	
 	for child in self.get_children():
-		if child is Camera2D:
-			camera = child as Camera2D
+		if child is SongCamera2D:
+			camera = child as SongCamera2D
 			break
 	if !is_instance_valid(camera):
 		print("Cannot find main camera!")
@@ -377,12 +383,12 @@ func import_camera_events() -> void:
 	var camera_track:int = song_animation.add_track(Animation.TYPE_VALUE)
 	var zoom_track:int = song_animation.add_track(Animation.TYPE_VALUE)
 	
-	song_animation.track_set_path(camera_track, NodePath(String(self.get_path_to(camera)) + ":position"))
+	song_animation.track_set_path(camera_track, NodePath(String(self.get_path_to(camera)) + ":point"))
 	song_animation.track_set_path(zoom_track, NodePath(String(self.get_path_to(camera)) + ":zoom"))
 	
-	var prev_position:Vector2 = camera.position
+	var prev_position:float = camera.point
 	for marker in new_chart._camera_movement_markers:
-		var target:Vector2 = extra_data.get("player_camera_position") if marker.get("focus_player") else extra_data.get("opponent_camera_position")
+		var target:float = 1 if marker.get("focus_player") else 0
 		if target == prev_position: continue
 		if marker.has("speed"):
 			song_animation.track_insert_key(camera_track, marker.get("time"), prev_position, Easing.from_string(marker.get("ease")))
@@ -396,7 +402,7 @@ func import_camera_events() -> void:
 	for marker in new_chart._camera_zoom_markers:
 		var zoom:float = default_zoom * marker.get("zoom") if !marker.get("direct") else marker.get("zoom")
 		var target:Vector2 = Vector2(zoom, zoom)
-		if target == prev_position: continue
+		if target == prev_zoom: continue
 		if marker.has("speed"):
 			song_animation.track_insert_key(zoom_track, marker.get("time"), prev_zoom, Easing.from_string(marker.get("ease")))
 			song_animation.track_insert_key(zoom_track, marker.get("time") + marker.get("speed"), target, 0)

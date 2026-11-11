@@ -1,4 +1,7 @@
 extends Node2D
+class_name MainMenu
+
+static var menu_song:String = "res://core/menu/music.ogg"
 
 static var current_item:int = 0
 var controllable:bool = true
@@ -8,7 +11,7 @@ func _ready() -> void:
 	%info_label.text += "\nPress %s to open Content Manager" % OS.get_keycode_string(Config.data.keybinds.ui_mod_manager).to_upper()
 	
 	if !GlobalSound.music_player.playing:
-		GlobalSound.play_music(load("res://core/menu/music.ogg"))
+		GlobalSound.play_music(load(menu_song))
 	
 	var init:Callable = func():
 		%camera.limit_top = %container.get_child(0).global_position.y - 100

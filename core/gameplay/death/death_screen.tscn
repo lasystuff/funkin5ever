@@ -15,10 +15,3 @@ unique_name_in_owner = true
 
 [node name="confirm" type="AudioStreamPlayer" parent="." unique_id=1830227933]
 unique_name_in_owner = true
-
-[node name="parallax_2d" type="Parallax2D" parent="." unique_id=1533498701]
-
-[node name="bg" type="ColorRect" parent="parallax_2d" unique_id=365004802]
-offset_right = 6400.0
-offset_bottom = 3600.0
-color = Color(0, 0, 0, 1)

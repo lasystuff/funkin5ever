@@ -1,17 +1,17 @@
 extends CanvasLayer
 
-const DEFAULT_TRANSITION_SCENE:PackedScene = preload("res://core/menu/transitions/default.tscn")
+var default_transition:String ="res://core/menu/transitions/default.tscn"
 
 var skip_out_transition:bool = false
 var skip_in_transition:bool = false
 
-func switch_scene(scene:PackedScene, transition_scene:PackedScene = DEFAULT_TRANSITION_SCENE) -> void:
-	if transition_scene == null:
-		transition_scene = DEFAULT_TRANSITION_SCENE
-		skip_in_transition = true
+func switch_scene(scene:PackedScene, transition_scene:String = default_transition) -> void:
+	if transition_scene.is_empty():
+		transition_scene = default_transition
+		skip_out_transition = true
 		skip_out_transition = true
 		
-	var transition:TransitionScene = transition_scene.instantiate()
+	var transition:TransitionScene = load(default_transition).instantiate()
 	transition.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(transition)
 	if !skip_out_transition:

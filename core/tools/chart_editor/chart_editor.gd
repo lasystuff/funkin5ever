@@ -374,14 +374,14 @@ func save(dir:String = "") -> void:
 	var target:String = dir
 	if target.is_empty():
 		var folder:String = ContentManager.get_content_path("gameplay/songs/" + song.meta._song_id)
-		print(folder)
 		if DirAccess.dir_exists_absolute(folder):
 			target = folder.path_join("charts/" + song.chart._difficulty + ".json")
 		else:
 			save_as()
 			return
 	
-	var file:FileAccess = FileAccess.open(target, FileAccess.WRITE)
+	print(target)
+	var file:FileAccess = FileAccess.open(target, FileAccess.READ_WRITE)
 	file.store_string(Funkin5everChart.export_string(song.chart))
 	file.close()
 

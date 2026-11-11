@@ -42,8 +42,9 @@ func _reload_icon() -> void:
 	if is_instance_valid(player_icon) && player_strumline.characters.size() > 0: player_icon.data = player_strumline.characters[0].health_icon
 	if is_instance_valid(opponent_icon) && opponent_strumline.characters.size() > 0: opponent_icon.data = opponent_strumline.characters[0].health_icon
 	
-	health_bar.tint_progress = player_icon.data.color
-	health_bar.tint_under = opponent_icon.data.color
+	if is_instance_valid(health_bar):
+		health_bar.tint_progress = player_icon.data.color
+		health_bar.tint_under = opponent_icon.data.color
 	
 func _update_score():
 	if is_instance_valid(score_text):

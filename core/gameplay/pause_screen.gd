@@ -61,7 +61,7 @@ func do_action(action:String) -> void:
 			Song.played_end_cutscene = false
 			
 			Discord.menu()
-			GlobalSound.play_music(load("res://core/menu/music.ogg"))
+			GlobalSound.play_music(load(MainMenu.menu_song))
 			
 			Transition.switch_scene(Song.return_scene)
 		# CUTSCENE

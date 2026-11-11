@@ -8,3 +8,4 @@ func _ready() -> void:
 	if !return_scene.is_empty():
 		self.back_scene_path = return_scene
 	super()
+	Config.save_config()

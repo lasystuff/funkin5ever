@@ -15,6 +15,11 @@ func _ready() -> void:
 		print("[Death Screen] Current player is invalid! Can't start death screen.")
 		return
 	
+	# dumb but idc
+	for c in Song.current.get_children():
+		if "modulate" in c and c != self:
+			c.modulate = Color.BLACK
+	
 	var origin_character = Song.current.hud.player_strumline.characters[0]
 	character = origin_character.death_character.instantiate()
 	add_child(character)

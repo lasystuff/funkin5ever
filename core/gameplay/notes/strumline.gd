@@ -72,6 +72,8 @@ func _process(delta: float) -> void:
 				%notes.add_child(note)
 				note_queue_index += 1
 				note_spawned.emit(note)
+				
+		
 		
 		for note in %notes.get_children():
 			note.global_position.x = strums[note.data.column].global_position.x
