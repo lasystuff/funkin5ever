@@ -2,7 +2,7 @@ extends CanvasLayer
 
 @onready var label:Label = %label
 
-var display_mode:int = 1
+var display_mode:int = 0
 
 var memory_peak:float = 0
 # Called every frame. 'delta' is the elapsed time since the previous frame.

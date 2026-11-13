@@ -82,7 +82,7 @@ func list_content_paths(path:String) -> Array:
 	return result
 
 func _folder_or_resource_exists(p:String) -> bool:
-	return DirAccess.dir_exists_absolute(p) or ResourceLoader.exists(p)
+	return !ResourceLoader.list_directory(p).is_empty() or ResourceLoader.exists(p)
 
 func create_list_save() -> Array[Dictionary]:
 	var result:Array[Dictionary] = []

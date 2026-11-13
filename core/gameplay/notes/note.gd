@@ -35,7 +35,7 @@ func reload_data():
 	self.state = NoteState.NEUTRAL
 	
 	var skin_path:String = ContentManager.get_content_path("gameplay/notes/" + data.type + "/skin.tres")
-	if FileAccess.file_exists(skin_path):
+	if ResourceLoader.exists(skin_path):
 		skin = load(skin_path)
 	else:
 		if is_instance_valid(strumline):

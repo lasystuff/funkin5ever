@@ -123,12 +123,11 @@ func _ready() -> void:
 	)
 	
 	# local scripts
-	if DirAccess.dir_exists_absolute(meta.resource_path.replace("meta.tres", "scripts/")):
-		for script_file in DirAccess.get_files_at(meta.resource_path.replace("meta.tres", "scripts/")):
-			if script_file.ends_with(".gd"):
-				var instance = load(meta.resource_path.replace("meta.tres", "scripts/").path_join(script_file)).new() as SongScript
-				scripts.push_back(instance)
-				instance._ready()
+	for script_file in ResourceLoader.list_directory(meta.resource_path.replace("meta.tres", "scripts/")):
+		if script_file.ends_with(".gd"):
+			var instance = load(meta.resource_path.replace("meta.tres", "scripts/").path_join(script_file)).new() as SongScript
+			scripts.push_back(instance)
+			instance._ready()
 	# global scripts
 	for script_file in ContentManager.list_content_paths("gameplay/scripts/"):
 		if script_file.ends_with(".gd"):
