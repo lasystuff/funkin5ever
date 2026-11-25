@@ -10,7 +10,7 @@ var volume:int = 10:
 		elif value < 0:
 			value = 0
 		volume = value
-		AudioServer.set_bus_volume_db(0, remap(volume, 0, 10, -80, 0))
+		AudioServer.set_bus_volume_linear(0, remap(volume, 0, 10, 0, 1))
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
